@@ -1,0 +1,19 @@
+{
+  "name": "pdf-tool-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "next build"
+  },
+  "dependencies": {
+    "next": "13.5.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "pdf-lib": "1.17.1",
+    "tailwindcss": "3.3.5",
+    "postcss": "8.4.31"
+  }
+}
