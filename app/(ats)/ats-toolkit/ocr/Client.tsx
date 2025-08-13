@@ -4,6 +4,9 @@ import DropZone from '@/components/DropZone';
 import { track } from '@/lib/analytics';
 import { createSampleScanJPG } from '@/lib/samples';
 import { useState } from 'react';
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export default function OCRClient() {
   const toast = useToast();
@@ -16,8 +19,7 @@ export default function OCRClient() {
     track('file_dropped', { tool: 'ocr' });
     if (file.type === 'application/pdf') {
       try {
-        const pdfjs = await import('pdfjs-dist');
-        const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+        const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
         let full = '';
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);

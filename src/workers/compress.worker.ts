@@ -1,11 +1,14 @@
 /// <reference lib="webworker" />
 
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+
 self.onmessage = async (e: MessageEvent) => {
   const { pdfBytes, dpi = 120, quality = 0.7 } = e.data || {};
   try {
-    const pdfjs = await import('pdfjs-dist');
     const pdfLib = await import('pdf-lib');
-    const doc = await pdfjs.getDocument({ data: pdfBytes }).promise;
+    const doc = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
     const pdfDoc = await pdfLib.PDFDocument.create();
     let beforeSize = pdfBytes.byteLength;
     let afterSize = 0;

@@ -1,3 +1,7 @@
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+
 export async function extractATSSafeText(input: File | ArrayBuffer | string): Promise<string> {
   const normalize = (txt: string) =>
     txt
@@ -46,8 +50,7 @@ export async function extractATSSafeText(input: File | ArrayBuffer | string): Pr
     if (ext === 'pdf' || input instanceof ArrayBuffer) {
       const data = input instanceof ArrayBuffer ? input : await readAsArrayBuffer(input as File);
       try {
-        const pdfjs = await import('pdfjs-dist');
-        const pdf = await pdfjs.getDocument({ data }).promise;
+        const pdf = await pdfjsLib.getDocument({ data }).promise;
         let out = '';
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
