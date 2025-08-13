@@ -6,11 +6,6 @@ import DownloadButton from '../../../components/DownloadButton';
 let TesseractPromise: typeof import('tesseract.js') | null = null;
 let pdfjs: typeof import('pdfjs-dist') | null = null;
 
-export const metadata = {
-  title: 'OCR Resume',
-  description: 'OCR for scanned resumes in your browser. Supports English and Vietnamese.',
-};
-
 export default function OcrPage() {
   const [text, setText] = useState('');
   const [blob, setBlob] = useState<Blob | null>(null);

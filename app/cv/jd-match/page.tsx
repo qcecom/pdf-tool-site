@@ -1,11 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 
-export const metadata = {
-  title: 'JD Match',
-  description: 'Compare your resume text with a job description. Text-only, private.',
-};
-
 export default function JdMatchPage() {
   const [resumeText, setResumeText] = useState('');
   const [jobText, setJobText] = useState('');

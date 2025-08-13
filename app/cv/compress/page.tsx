@@ -5,11 +5,6 @@ import ProgressBar from '../../../components/ProgressBar';
 import DownloadButton from '../../../components/DownloadButton';
 import { PDFDocument } from 'pdf-lib';
 
-export const metadata = {
-  title: 'Compress Resume PDF',
-  description: 'Compress your CV under 2MB in the browser. No uploads.',
-};
-
 export default function CvCompress() {
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

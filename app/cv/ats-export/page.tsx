@@ -4,11 +4,6 @@ import UploadArea from '../../../components/UploadArea';
 import DownloadButton from '../../../components/DownloadButton';
 let pdfjs: typeof import('pdfjs-dist') | null = null;
 
-export const metadata = {
-  title: 'ATS Export',
-  description: 'Extract resume text client-side for ATS forms. No upload.',
-};
-
 export default function AtsExport() {
   const [text, setText] = useState('');
   const [blob, setBlob] = useState<Blob | null>(null);
