@@ -1,7 +1,6 @@
 import Hero from '@/components/Hero';
 import ToolCard from '@/components/ToolCard';
 import PrivacyFooter from '@/components/PrivacyFooter';
-import Seo from '@/components/Seo';
 import { ToastProvider } from '@/components/toast/ToastProvider';
 import AppErrorBoundary from '@/components/AppErrorBoundary';
 
@@ -12,11 +11,15 @@ const tools = [
   { title: 'JD Match', href: '/ats-toolkit/jd-match', hint: 'Resume vs Job' },
 ];
 
+export const metadata = {
+  title: 'ATS Toolkit',
+  description: 'Tools for ATS friendly resumes',
+};
+
 export default function Page() {
   return (
     <AppErrorBoundary>
       <ToastProvider>
-        <Seo title="ATS Toolkit" description="Tools for ATS friendly resumes" />
         <Hero />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4">
           {tools.map((t) => (
