@@ -10,7 +10,7 @@ self.onmessage = async (e: MessageEvent) => {
     const page = await pdf.getPage(i);
     const viewport = page.getViewport({ scale: 1 });
     const canvas = new OffscreenCanvas(viewport.width, viewport.height);
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d') as unknown as CanvasRenderingContext2D;
     await page.render({ canvasContext: ctx, viewport }).promise;
     const blob = await canvas.convertToBlob({ type: 'image/jpeg', quality });
     const buf = await blob.arrayBuffer();
