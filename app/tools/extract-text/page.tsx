@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import UploadArea from '../../../components/UploadArea';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.js?url';
 import Tesseract from 'tesseract.js';
 
-GlobalWorkerOptions.workerSrc = pdfjsWorker;
+GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.js';
 
 export default function ExtractTextPage() {
   const [processing, setProcessing] = useState(false);
