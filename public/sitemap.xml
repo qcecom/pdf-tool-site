@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>/</loc></url>
+  <url><loc>/tools/merge</loc></url>
+  <url><loc>/cv</loc></url>
+  <url><loc>/cv/compress</loc></url>
+  <url><loc>/cv/ats-export</loc></url>
+  <url><loc>/cv/ocr</loc></url>
+  <url><loc>/cv/jd-match</loc></url>
+</urlset>
