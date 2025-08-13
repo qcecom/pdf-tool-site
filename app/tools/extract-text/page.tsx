@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import UploadArea from '../../../components/UploadArea';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.js';
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.js?url';
 import Tesseract from 'tesseract.js';
 
 GlobalWorkerOptions.workerSrc = pdfjsWorker;
