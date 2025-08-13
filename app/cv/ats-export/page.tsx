@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import UploadArea from '../../../components/UploadArea';
 import DownloadButton from '../../../components/DownloadButton';
-let pdfjs: typeof import('pdfjs-dist') | null = null;
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export default function AtsExport() {
   const [text, setText] = useState('');
@@ -14,13 +16,8 @@ export default function AtsExport() {
     if (!file) return;
     setMessage('');
     setText('');
-    if (!pdfjs) {
-      pdfjs = await import('pdfjs-dist');
-      pdfjs.GlobalWorkerOptions.workerSrc =
-        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.js';
-    }
     const bytes = await file.arrayBuffer();
-    const pdf = await pdfjs!.getDocument({ data: bytes }).promise;
+    const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
     let result = '';
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);

@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import UploadArea from '../../../components/UploadArea';
 import ProgressBar from '../../../components/ProgressBar';
 import DownloadButton from '../../../components/DownloadButton';
+import * as pdfjsLib from 'pdfjs-dist';
 let TesseractPromise: typeof import('tesseract.js') | null = null;
-let pdfjs: typeof import('pdfjs-dist') | null = null;
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export default function OcrPage() {
   const [text, setText] = useState('');
@@ -26,13 +28,8 @@ export default function OcrPage() {
         TesseractPromise = await import('tesseract.js');
       }
       if (file.type === 'application/pdf') {
-        if (!pdfjs) {
-          pdfjs = await import('pdfjs-dist');
-          pdfjs.GlobalWorkerOptions.workerSrc =
-            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.js';
-        }
         const bytes = await file.arrayBuffer();
-        const pdf = await pdfjs!.getDocument({ data: bytes }).promise;
+        const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
         let res = '';
         for (let i = 1; i <= pdf.numPages; i++) {
           if (canceled) break;

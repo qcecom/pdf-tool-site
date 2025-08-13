@@ -1,11 +1,10 @@
 'use client';
 import React, { useState } from 'react';
 import UploadArea from '../../../components/UploadArea';
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist';
 import Tesseract from 'tesseract.js';
 
-GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export default function ExtractTextPage() {
   const [processing, setProcessing] = useState(false);
@@ -18,7 +17,7 @@ export default function ExtractTextPage() {
     setProcessing(true);
     try {
       const bytes = await file.arrayBuffer();
-      const loadingTask = getDocument({ data: bytes });
+      const loadingTask = pdfjsLib.getDocument({ data: bytes });
       const pdf = await loadingTask.promise;
       let result = '';
       for (let i = 1; i <= pdf.numPages; i++) {

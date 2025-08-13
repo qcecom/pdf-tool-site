@@ -1,10 +1,10 @@
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
-GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.js';
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 self.onmessage = async (e: MessageEvent) => {
   const { pdfBytes, quality } = e.data as { pdfBytes: ArrayBuffer; quality: number };
-  const pdf = await getDocument({ data: pdfBytes }).promise;
+  const pdf = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
   const images: Uint8Array[] = [];
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
