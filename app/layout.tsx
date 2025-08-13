@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import React from 'react';
+import AppErrorBoundary from '@/components/AppErrorBoundary';
 
 export const metadata = {
   title: 'PDF Tool Site',
@@ -13,7 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className="min-h-screen bg-gray-50 text-gray-900">
-        {children}
+        <AppErrorBoundary>
+          {children}
+        </AppErrorBoundary>
         <script
           dangerouslySetInnerHTML={{
             __html:

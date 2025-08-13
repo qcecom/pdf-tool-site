@@ -8,6 +8,11 @@ interface Props {
 
 export default function DownloadButton({ blob, filename }: Props) {
   const url = React.useMemo(() => URL.createObjectURL(blob), [blob]);
+
+  React.useEffect(() => {
+    return () => URL.revokeObjectURL(url);
+  }, [url]);
+
   return (
     <a
       href={url}
