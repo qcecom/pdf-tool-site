@@ -23,26 +23,27 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <Ctx.Provider value={add}>
       {children}
-      {createPortal(
-        <div className="fixed top-4 right-4 space-y-2 z-50">
-          {toasts.map((t) => (
-            <div
-              key={t.id}
-              className={`px-3 py-2 rounded shadow text-white ${
-                t.type === 'error'
-                  ? 'bg-red-600'
-                  : t.type === 'success'
-                  ? 'bg-green-600'
-                  : 'bg-gray-800'
-              }`}
-            >
-              {t.message}
-            </div>
-          ))}
-        </div>,
-        document.body
-      )}
-    </Ctx.Provider>
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <div className="fixed top-4 right-4 space-y-2 z-50">
+            {toasts.map((t) => (
+              <div
+                key={t.id}
+                className={`px-3 py-2 rounded shadow text-white ${
+                  t.type === 'error'
+                    ? 'bg-red-600'
+                    : t.type === 'success'
+                    ? 'bg-green-600'
+                    : 'bg-gray-800'
+                }`}
+              >
+                {t.message}
+              </div>
+            ))}
+          </div>,
+          document.body
+        )}
+      </Ctx.Provider>
   );
 }
 

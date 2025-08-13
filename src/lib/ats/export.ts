@@ -46,7 +46,7 @@ export async function extractATSSafeText(input: File | ArrayBuffer | string): Pr
     if (ext === 'pdf' || input instanceof ArrayBuffer) {
       const data = input instanceof ArrayBuffer ? input : await readAsArrayBuffer(input as File);
       try {
-        const pdfjs = await import('pdfjs-dist/build/pdf');
+        const pdfjs = await import('pdfjs-dist');
         const pdf = await pdfjs.getDocument({ data }).promise;
         let out = '';
         for (let i = 1; i <= pdf.numPages; i++) {

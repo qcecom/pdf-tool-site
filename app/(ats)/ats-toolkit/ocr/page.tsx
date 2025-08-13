@@ -18,7 +18,7 @@ function Inner() {
     track('file_dropped', { tool: 'ocr' });
     if (file.type === 'application/pdf') {
       try {
-        const pdfjs = await import('pdfjs-dist/build/pdf');
+        const pdfjs = await import('pdfjs-dist');
         const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
         let full = '';
         for (let i = 1; i <= pdf.numPages; i++) {

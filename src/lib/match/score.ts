@@ -8,7 +8,7 @@ export type MatchReport = {
 const STOPWORDS = new Set('the a an and or of to in with on for by'.split(' '));
 const SYNONYMS: Record<string, string[]> = {
   excel: ['ms excel'],
-  bachelor's: ['ba', 'bs', 'bsc'],
+  "bachelor's": ['ba', 'bs', 'bsc'],
   crm: ['salesforce', 'hubspot'],
   python: ['py'],
 };
