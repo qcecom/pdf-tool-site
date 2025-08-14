@@ -1,10 +1,23 @@
+export interface UploadProgress {
+  percent: number;
+  bytesDone: number;
+  bytesTotal: number;
+  etaSeconds: number;
+}
+
+export interface UploadResult {
+  jobId: string;
+  filename: string;
+  size: number;
+}
+
 export async function uploadWithProgress(
   file: File,
-  onProgress: (info: { percent: number; bytesDone: number; bytesTotal: number; etaSeconds: number }) => void,
+  onProgress: (info: UploadProgress) => void,
   signal?: AbortSignal
-) {
+): Promise<UploadResult> {
   const start = Date.now();
-  return new Promise<{ jobId: string; filename: string; size: number }>((resolve, reject) => {
+  return new Promise<UploadResult>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/api/upload');
     xhr.responseType = 'json';

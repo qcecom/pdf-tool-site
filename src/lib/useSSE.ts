@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { ProgressInfo, DoneInfo, ErrorInfo } from './jobTypes';
+import type { JobProgress } from '@/types/job';
 
 interface Handlers {
-  onProgress: (p: ProgressInfo) => void;
-  onDone: (d: DoneInfo) => void;
-  onError: (e: ErrorInfo) => void;
+  onProgress: (p: JobProgress) => void;
+  onDone: (d: JobProgress) => void;
+  onError: (e: JobProgress) => void;
 }
 
 export default function useSSE(jobId: string | undefined, handlers: Handlers) {
@@ -17,14 +17,14 @@ export default function useSSE(jobId: string | undefined, handlers: Handlers) {
       const src = new EventSource(`/api/status?jobId=${jobId}`);
       sourceRef.current = src;
       src.addEventListener('progress', (e) => {
-        handlers.onProgress(JSON.parse((e as MessageEvent).data));
+        handlers.onProgress(JSON.parse((e as MessageEvent<string>).data) as JobProgress);
       });
       src.addEventListener('done', (e) => {
-        handlers.onDone(JSON.parse((e as MessageEvent).data));
+        handlers.onDone(JSON.parse((e as MessageEvent<string>).data) as JobProgress);
       });
       src.addEventListener('error', (e) => {
-        const data = (e as MessageEvent).data;
-        if (data) handlers.onError(JSON.parse(data));
+        const data = (e as MessageEvent<string>).data;
+        if (data) handlers.onError(JSON.parse(data) as JobProgress);
       });
       src.onerror = () => {
         src.close();

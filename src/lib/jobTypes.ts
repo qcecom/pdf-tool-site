@@ -1,19 +1,9 @@
+import type { ErrorCode } from '@/types/job';
+
 export type JobState = 'IDLE' | 'UPLOADING' | 'PROCESSING' | 'DONE' | 'ERROR';
 
-export interface ProgressInfo {
-  phase: 'upload' | 'processing';
-  percent: number;
-  bytesDone: number;
-  bytesTotal: number;
-  etaSeconds: number;
-}
-
-export interface DoneInfo {
-  downloadUrl: string;
-}
-
 export interface ErrorInfo {
-  code: string;
+  code: ErrorCode;
   message: string;
 }
 

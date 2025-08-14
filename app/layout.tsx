@@ -1,10 +1,11 @@
 import '../styles/globals.css';
 import React from 'react';
+import type { Metadata } from 'next';
 import AppErrorBoundary from '@/components/AppErrorBoundary';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'PDF Tool Site',
   description: 'Client-side PDF utilities'
 };
