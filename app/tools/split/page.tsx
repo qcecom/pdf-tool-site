@@ -2,16 +2,19 @@
 import React, { useState } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import UploadArea from '../../../components/UploadArea';
+import ProgressBar from '../../../components/ProgressBar';
 
 export default function SplitPage() {
   const [range, setRange] = useState('1-1');
   const [processing, setProcessing] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleFiles = async (files: FileList) => {
     const file = files[0];
     if (!file) return;
     setProcessing(true);
+    setProgress(0);
     try {
       const [startStr, endStr] = range.split('-');
       const start = parseInt(startStr, 10) - 1;
@@ -21,7 +24,10 @@ export default function SplitPage() {
       const newPdf = await PDFDocument.create();
       const indices = pdf.getPageIndices().slice(start, end + 1);
       const copied = await newPdf.copyPages(pdf, indices);
-      copied.forEach((p) => newPdf.addPage(p));
+      for (let i = 0; i < copied.length; i++) {
+        newPdf.addPage(copied[i]);
+        setProgress(Math.round(((i + 1) / copied.length) * 100));
+      }
       const newBytes = await newPdf.save();
       const blob = new Blob([newBytes], { type: 'application/pdf' });
       setDownloadUrl(URL.createObjectURL(blob));
@@ -44,7 +50,7 @@ export default function SplitPage() {
         />
       </div>
       <UploadArea onFiles={handleFiles} accept="application/pdf" />
-      {processing && <p>Processing...</p>}
+      {processing && <ProgressBar value={progress} />}
       {downloadUrl && (
         <a
           href={downloadUrl}

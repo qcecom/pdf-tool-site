@@ -2,20 +2,27 @@
 import React, { useState } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import UploadArea from '../../../components/UploadArea';
+import ProgressBar from '../../../components/ProgressBar';
 
 export default function CompressPage() {
   const [processing, setProcessing] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [quality, setQuality] = useState(0.7);
+  const [progress, setProgress] = useState(0);
 
   const handleFiles = async (files: FileList) => {
     const file = files[0];
     if (!file) return;
     setProcessing(true);
+    setProgress(0);
     try {
+      setProgress(20);
       const bytes = await file.arrayBuffer();
+      setProgress(40);
       const pdf = await PDFDocument.load(bytes);
+      setProgress(70);
       const compressedBytes = await pdf.save({ useObjectStreams: true });
+      setProgress(100);
       const blob = new Blob([compressedBytes], { type: 'application/pdf' });
       setDownloadUrl(URL.createObjectURL(blob));
     } catch (e) {
@@ -41,7 +48,7 @@ export default function CompressPage() {
         <span className="ml-2">{quality}</span>
       </div>
       <UploadArea onFiles={handleFiles} accept="application/pdf" />
-      {processing && <p>Processing...</p>}
+      {processing && <ProgressBar value={progress} />}
       {downloadUrl && (
         <a
           href={downloadUrl}
