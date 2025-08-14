@@ -6,7 +6,14 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata = {
   title: 'PDF Tool Site',
-  description: 'Client-side PDF utilities'
+  description: 'Client-side PDF utilities',
+  openGraph: {
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/twitter-image'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
