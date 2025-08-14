@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import UploadArea from '../../../components/UploadArea';
+import ProgressBar from '../../../components/ProgressBar';
 import * as pdfjsLib from 'pdfjs-dist';
 import Tesseract from 'tesseract.js';
 
@@ -10,11 +11,13 @@ export default function ExtractTextPage() {
   const [processing, setProcessing] = useState(false);
   const [text, setText] = useState('');
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const handleFiles = async (files: FileList) => {
     const file = files[0];
     if (!file) return;
     setProcessing(true);
+    setProgress(0);
     try {
       const bytes = await file.arrayBuffer();
       const loadingTask = pdfjsLib.getDocument({ data: bytes });
@@ -30,6 +33,7 @@ export default function ExtractTextPage() {
         await page.render({ canvasContext: context, viewport }).promise;
         const { data } = await Tesseract.recognize(canvas, 'eng');
         result += data.text + '\n';
+        setProgress(Math.round((i / pdf.numPages) * 100));
       }
       setText(result);
       const blob = new Blob([result], { type: 'text/plain' });
@@ -45,7 +49,7 @@ export default function ExtractTextPage() {
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Extract Text</h1>
       <UploadArea onFiles={handleFiles} accept="application/pdf" />
-      {processing && <p>Processing...</p>}
+      {processing && <ProgressBar value={progress} />}
       {text && (
         <textarea value={text} readOnly className="w-full h-48 border p-2" />
       )}
