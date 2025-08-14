@@ -13,13 +13,13 @@ export const generateMetadata = (): Metadata => {
       title,
       description,
       url,
-      images: [{ url: siteConfig.ogImage }],
+      images: [{ url: "/opengraph-image" }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [siteConfig.ogImage],
+      images: ["/opengraph-image"],
     },
   };
 };
