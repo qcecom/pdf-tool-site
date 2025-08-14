@@ -133,6 +133,7 @@ export default function ImageToPdfPage() {
 
   // resume on refresh
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const id = window.location.hash.slice(1);
     if (id) {
       const info = localStorage.getItem('job-' + id);
@@ -156,7 +157,7 @@ export default function ImageToPdfPage() {
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Image to PDF</h1>
       <DropZone accept="image/*" onFiles={handleFiles} />
-      {window?.isSecureContext && (
+      {typeof window !== 'undefined' && window.isSecureContext && (
         <p className="text-xs text-gray-600 flex items-center gap-1">
           <span>🔒</span> HTTPS protected
         </p>
