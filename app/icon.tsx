@@ -1,4 +1,4 @@
-import { ImageResponse } from "next/og";
+import { ImageResponse } from "next/server";
 import { siteConfig } from "@/config/site";
 
 export const size = { width: 64, height: 64 };
