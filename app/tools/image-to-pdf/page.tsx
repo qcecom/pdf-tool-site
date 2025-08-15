@@ -7,6 +7,7 @@ import SecurityNote from '@/components/ux/SecurityNote';
 import useSSE from '@/lib/useSSE';
 import { uploadWithProgress } from '@/lib/uploadWithProgress';
 import { FileJob } from '@/lib/jobTypes';
+import type { JobProgress } from '@/types/job';
 
 const ERROR_MESSAGES: Record<string, string> = {
   E_UNSUPPORTED_TYPE: 'Unsupported file type.',
@@ -89,11 +90,11 @@ export default function ImageToPdfPage() {
   const currentId = processingJob?.jobId;
 
   const sseRef = useSSE(currentId, {
-    onProgress: (p) => {
+    onProgress: (p: JobProgress) => {
       const idx = jobs.findIndex((j) => j.jobId === currentId);
       if (idx !== -1) updateJob(idx, { progress: p.percent, eta: p.etaSeconds });
     },
-    onDone: (d) => {
+    onDone: (d: JobProgress) => {
       const idx = jobs.findIndex((j) => j.jobId === currentId);
       if (idx !== -1)
         updateJob(idx, { state: 'DONE', downloadUrl: d.downloadUrl, progress: 100, eta: 0 });
@@ -103,11 +104,11 @@ export default function ImageToPdfPage() {
         if (location.hash.slice(1) === currentId) location.hash = '';
       }
     },
-    onError: (e) => {
+    onError: (e: JobProgress) => {
       const idx = jobs.findIndex((j) => j.jobId === currentId);
-      if (idx !== -1)
-        updateJob(idx, { state: 'ERROR', error: { code: e.code, message: e.message } });
-      setToast({ message: e.message, type: 'error' });
+      if (idx !== -1 && e.error)
+        updateJob(idx, { state: 'ERROR', error: e.error });
+      if (e.error) setToast({ message: e.error.message, type: 'error' });
       if (currentId) {
         localStorage.removeItem('job-' + currentId);
         if (location.hash.slice(1) === currentId) location.hash = '';

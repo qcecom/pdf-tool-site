@@ -1,6 +1,7 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'ATS-ready CV Toolkit',
   description: 'Private client-side CV tools. No uploads.',
 };

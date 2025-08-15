@@ -1,5 +1,11 @@
 import { NextRequest } from 'next/server';
 
+interface UploadResponse {
+  jobId: string;
+  filename: string;
+  size: number;
+}
+
 export async function POST(req: NextRequest) {
   const form = await req.formData();
   const file = form.get('file') as File | null;
@@ -12,5 +18,5 @@ export async function POST(req: NextRequest) {
     (globalThis as any)._jobs = (globalThis as any)._jobs || {};
     (globalThis as any)._jobs[jobId] = { filename: file.name, size: file.size };
   }
-  return Response.json({ jobId, filename: file.name, size: file.size });
+  return Response.json<UploadResponse>({ jobId, filename: file.name, size: file.size });
 }

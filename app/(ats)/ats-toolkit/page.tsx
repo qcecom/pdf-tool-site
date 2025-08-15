@@ -3,6 +3,7 @@ import ToolCard from '@/components/ToolCard';
 import PrivacyFooter from '@/components/PrivacyFooter';
 import { ToastProvider } from '@/components/toast/ToastProvider';
 import AppErrorBoundary from '@/components/AppErrorBoundary';
+import type { Metadata } from 'next';
 
 const tools = [
   { title: 'Compress', href: '/ats-toolkit/compress', hint: 'Shrink PDF size' },
@@ -11,7 +12,7 @@ const tools = [
   { title: 'JD Match', href: '/ats-toolkit/jd-match', hint: 'Resume vs Job' },
 ];
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'ATS Toolkit',
   description: 'Tools for ATS friendly resumes',
 };
