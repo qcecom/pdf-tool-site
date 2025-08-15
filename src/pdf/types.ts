@@ -1,13 +1,18 @@
-export interface CompressPayload {
+export interface CompressCvPayload {
   file: ArrayBuffer;
+  target?: '2mb' | '1mb';
   quality?: number;
 }
 
-export interface MergePayload {
+export interface MergeCvPayload {
   files: ArrayBuffer[];
 }
 
-export interface SplitPayload {
+export interface ExportTextPayload {
   file: ArrayBuffer;
-  ranges: number[][];
+}
+
+export interface OcrPayload {
+  file: ArrayBuffer;
+  lang: 'eng' | 'vie';
 }

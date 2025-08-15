@@ -1,7 +1,7 @@
 import { PDFDocument } from "pdf-lib";
-import type { MergePayload } from "@/pdf/types";
+import type { MergeCvPayload } from "@/pdf/types";
 
-self.onmessage = async (e: MessageEvent<MergePayload>) => {
+self.onmessage = async (e: MessageEvent<MergeCvPayload>) => {
   try {
     const { files } = e.data;
     (self as any).postMessage({ type: "progress", value: 2 });
@@ -14,12 +14,15 @@ self.onmessage = async (e: MessageEvent<MergePayload>) => {
       done++;
       (self as any).postMessage({
         type: "progress",
-        value: Math.min(98, Math.round((done / files.length) * 98))
+        value: Math.min(98, Math.round((done / files.length) * 98)),
       });
     }
     const out = await outPdf.save({ useObjectStreams: true });
     (self as any).postMessage({ type: "result", data: out.buffer }, [out.buffer]);
   } catch (err: any) {
-    (self as any).postMessage({ type: "error", message: err?.message ?? "Merge failed" });
+    (self as any).postMessage({
+      type: "error",
+      message: err?.message ?? "Merge failed",
+    });
   }
 };
