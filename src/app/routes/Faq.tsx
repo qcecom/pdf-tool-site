@@ -3,7 +3,7 @@ import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
 export default function Faq() {
-  useMeta({ title: "FAQ - ATS CV Toolkit", description: "Common questions about using the toolkit" });
+  useMeta({ title: "FAQ - nouploadpdf.com", description: "Common questions about using the toolkit" });
   return (
     <>
       <Header />

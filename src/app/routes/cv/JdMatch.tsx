@@ -11,7 +11,7 @@ interface Result {
 }
 
 export default function JdMatch() {
-  useMeta({ title: "JD Match - ATS CV Toolkit", description: "Find missing keywords from job descriptions" });
+  useMeta({ title: "JD Match - nouploadpdf.com", description: "Find missing keywords from job descriptions" });
   const [jd, setJd] = useState("");
   const [cv, setCv] = useState("");
   const [result, setResult] = useState<Result | null>(null);

@@ -3,7 +3,7 @@ import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
 export default function Contact(){
-  useMeta({title:"Contact - ATS CV Toolkit",description:"Get in touch via email"});
+  useMeta({title:"Contact - nouploadpdf.com",description:"Get in touch via email"});
   return(
     <>
       <Header/>

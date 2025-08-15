@@ -11,7 +11,7 @@ import { canUse, consume, isPro } from "@/pro/gating";
 import UpgradeModal from "@/app/components/UpgradeModal";
 
 export default function Ocr() {
-  useMeta({ title: "OCR - ATS CV Toolkit", description: "Turn scanned CVs into editable text" });
+  useMeta({ title: "OCR - nouploadpdf.com", description: "Turn scanned CVs into editable text" });
   const { run, progress, status, error, result } = useWorker(OcrWorker);
   const [text, setText] = useState("");
   const [lang, setLang] = useState<'eng' | 'vie'>('eng');
@@ -20,7 +20,7 @@ export default function Ocr() {
   const handleFile = async (file: File) => {
     if (!canUse("ocr")) { setUp(true); return; }
     const buf = await file.arrayBuffer();
-    run({ file: buf, lang });
+    run({ file: buf, lang }, [buf]);
     consume("ocr");
   };
 

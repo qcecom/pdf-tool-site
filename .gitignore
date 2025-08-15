@@ -1,3 +1,8 @@
-node_modules
-.next
-out
+node_modules/
+dist/
+*.pdf
+*.traineddata
+*.zip
+*.gif
+*.mp4
+*.png

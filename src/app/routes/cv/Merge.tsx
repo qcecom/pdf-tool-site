@@ -11,7 +11,7 @@ import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
 export default function Merge() {
-  useMeta({ title: "Merge PDFs - ATS CV Toolkit", description: "Combine CV and portfolio on-device" });
+  useMeta({ title: "Merge PDFs - nouploadpdf.com", description: "Combine CV and portfolio on-device" });
   const { run, progress, status, error, result } = useWorker(MergeWorker);
   const [files, setFiles] = useState<File[]>([]);
 
@@ -21,7 +21,7 @@ export default function Merge() {
 
   const startMerge = async () => {
     const bufs = await Promise.all(files.map((f) => f.arrayBuffer()));
-    run({ files: bufs });
+    run({ files: bufs }, bufs);
   };
 
   useEffect(() => {
