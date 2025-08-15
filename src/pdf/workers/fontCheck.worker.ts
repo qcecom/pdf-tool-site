@@ -20,7 +20,7 @@ self.onmessage=async(e:MessageEvent<{file:ArrayBuffer;maxPages?:number}>)=>{
     const fonts=Object.entries(seen).map(([name,count])=>({name,count})).sort((a,b)=>b.count-a.count);
     const risky=fonts.filter(f=>ATS_RISK.some(r=>f.name.includes(r)));
     const warnings:string[]=[];
-    if(risky.length) warnings.push(`Potentially ATS‑unfriendly: ${risky.map(r=>r.name).join(", ")}`);
+    if(risky.length) warnings.push(`Potentially ATS-unfriendly: ${risky.map(r=>r.name).join(", ")}`);
     if(!fonts.some(f=>ATS_GOOD.some(g=>f.name.includes(g))))
       warnings.push("Consider common system fonts like Arial/Calibri for better ATS parsing.");
     post({type:"result",data:{fonts,warnings,recommended:ATS_GOOD}});

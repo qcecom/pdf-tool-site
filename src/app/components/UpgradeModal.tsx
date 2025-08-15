@@ -6,7 +6,7 @@ export default function UpgradeModal({open,onClose}:{open:boolean;onClose:()=>vo
   return(<div role="dialog" aria-modal="true" style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",display:"grid",placeItems:"center",zIndex:50}}>
     <div className="card" style={{width:"min(420px,92vw)"}}>
       <h3 style={{marginTop:0}}>Go Pro</h3>
-      <p className="mono">Unlimited OCR & JD‑Match, batch tools.</p>
+      <p className="mono">Unlimited OCR & JD-Match, batch tools.</p>
       <input value={code} onChange={e=>setCode(e.target.value)} placeholder="Redeem code"
         style={{padding:"10px 12px",borderRadius:10,border:"1px solid var(--border)",background:"transparent",color:"var(--text)",width:"100%"}}/>
       <div style={{display:"flex",gap:10,marginTop:10,flexWrap:"wrap"}}>

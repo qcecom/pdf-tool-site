@@ -19,7 +19,7 @@ export default function Toast({ message, onClose }: Props) {
     >
       {message}
       <button style={{ marginLeft: 8 }} onClick={onClose}>
-        ×
+        x
       </button>
     </div>
   );
