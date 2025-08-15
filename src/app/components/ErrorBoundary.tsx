@@ -3,13 +3,12 @@ import React from "react";
 interface Props {
   children: React.ReactNode;
 }
-
 interface State {
   hasError: boolean;
   error: unknown;
 }
 
-export default class AppErrorBoundary extends React.Component<Props, State> {
+export default class ErrorBoundary extends React.Component<Props, State> {
   override state: State = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: unknown): State {

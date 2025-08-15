@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 interface Props {
   onFile: (file: File) => void;
@@ -7,10 +7,13 @@ interface Props {
 const MAX_SIZE = 50 * 1024 * 1024;
 
 export default function Dropzone({ onFile }: Props) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleFiles = useCallback(
     (files: FileList | null) => {
       if (!files || files.length === 0) return;
-      const file = files[0];
+      const file = files.item(0);
+      if (!file) return;
       if (file.type !== "application/pdf") {
         alert("Only PDF files are supported");
         return;
@@ -23,11 +26,30 @@ export default function Dropzone({ onFile }: Props) {
     [onFile]
   );
 
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    handleFiles(e.dataTransfer.files);
+  };
+
   return (
-    <input
-      type="file"
-      accept="application/pdf"
-      onChange={(e) => handleFiles(e.target.files)}
-    />
+    <div
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={onDrop}
+      style={{ border: "2px dashed #ccc", padding: 20, textAlign: "center" }}
+    >
+      <p>
+        Drop PDF here or
+        <button type="button" onClick={() => inputRef.current?.click()}>
+          Choose File
+        </button>
+      </p>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="application/pdf"
+        style={{ display: "none" }}
+        onChange={(e) => handleFiles(e.target.files)}
+      />
+    </div>
   );
 }

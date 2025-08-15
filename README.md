@@ -1,23 +1,39 @@
-# pdf-tool-site
+# ATS-ready CV PDF Toolkit
 
-A fast, minimal PDF tool running fully in your browser. Merge, split and compress PDFs without uploading anything.
+Fast, private CV PDF tools — ATS-ready in minutes. No upload, no sign-up.
+
+## Tools
+- **Compress** – shrink PDF size
+- **Merge** – combine multiple PDFs
+- **ATS Export** – extract plain text
+- **OCR** – scan PDFs (free 1/day)
+- **JD Match** – compare CV text with a job description (free 1/day)
 
 ## Development
 
 ```bash
-pnpm install
-pnpm dev
+npm install
+npm run dev
 ```
 
 Type checking, linting and build:
 
 ```bash
-pnpm typecheck
-pnpm lint
-pnpm build
+npm run typecheck
+npm run lint
+npm run build
 ```
 
-## Notes
+## Env flags
+- `VITE_AI_ENABLED` – enable AI features (default `false`)
+- `VITE_BILLING_ENABLED` – mock billing flows (default `false`)
+- `VITE_ANALYTICS_ENABLED` – optional analytics (default `false`)
 
-- Files larger than **50MB** will trigger a warning; consider splitting first.
-- All processing happens client-side. Your PDFs never leave your device.
+## Privacy
+All processing happens in your browser with Web Workers and ArrayBuffer transfer. No files are uploaded or stored.
+
+## Limits
+Free tier allows one OCR and one JD match per day. Counts reset daily in `localStorage`.
+
+## Offline
+The app works offline after the first load. PDFs are never cached.

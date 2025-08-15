@@ -1,29 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 
-export type WorkerEvent =
+type WorkerEvent =
   | { type: "progress"; value: number; note?: string }
-  | { type: "result"; data: ArrayBuffer | ArrayBuffer[] }
+  | { type: "result"; data: any }
   | { type: "error"; message: string };
 
-export function useWorker(WorkerCtor: null | (new () => Worker)) {
-  const workerRef = useRef<Worker | null>(null);
+export function useWorker(WorkerCtor: new () => Worker) {
+  const ref = useRef<Worker | null>(null);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState<"idle" | "working" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<ArrayBuffer | ArrayBuffer[] | null>(null);
+  const [result, setResult] = useState<any>(null);
 
   useEffect(() => {
-    if (!WorkerCtor) return;
     const w = new WorkerCtor();
-    workerRef.current = w;
+    ref.current = w;
     w.onmessage = (e: MessageEvent<WorkerEvent>) => {
-      const msg = e.data;
-      if (msg.type === "progress") setProgress(msg.value);
-      else if (msg.type === "result") {
-        setResult(msg.data);
+      const m = e.data;
+      if (m.type === "progress") setProgress(m.value);
+      if (m.type === "result") {
+        setResult(m.data);
         setStatus("done");
-      } else if (msg.type === "error") {
-        setError(msg.message);
+      }
+      if (m.type === "error") {
+        setError(m.message);
         setStatus("error");
       }
     };
@@ -32,13 +32,12 @@ export function useWorker(WorkerCtor: null | (new () => Worker)) {
 
   const run = (payload: unknown) => {
     setStatus("working");
-    setError(null);
     setProgress(0);
+    setError(null);
     setResult(null);
-    workerRef.current?.postMessage(payload);
+    ref.current?.postMessage(payload);
   };
-
-  if (!WorkerCtor) return null;
 
   return { run, progress, status, error, result };
 }
+
