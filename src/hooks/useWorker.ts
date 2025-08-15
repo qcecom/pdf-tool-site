@@ -5,7 +5,7 @@ export type WorkerEvent =
   | { type: "result"; data: ArrayBuffer | ArrayBuffer[] }
   | { type: "error"; message: string };
 
-export function useWorker(WorkerCtor: new () => Worker) {
+export function useWorker(WorkerCtor: null | (new () => Worker)) {
   const workerRef = useRef<Worker | null>(null);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState<"idle" | "working" | "done" | "error">("idle");
@@ -13,6 +13,7 @@ export function useWorker(WorkerCtor: new () => Worker) {
   const [result, setResult] = useState<ArrayBuffer | ArrayBuffer[] | null>(null);
 
   useEffect(() => {
+    if (!WorkerCtor) return;
     const w = new WorkerCtor();
     workerRef.current = w;
     w.onmessage = (e: MessageEvent<WorkerEvent>) => {
@@ -36,6 +37,8 @@ export function useWorker(WorkerCtor: new () => Worker) {
     setResult(null);
     workerRef.current?.postMessage(payload);
   };
+
+  if (!WorkerCtor) return null;
 
   return { run, progress, status, error, result };
 }

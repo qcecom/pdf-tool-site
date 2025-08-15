@@ -7,7 +7,7 @@ import { downloadBuffer } from "@/pdf/utils";
 
 export default function CompressRoute() {
   const [WorkerCtor, setWorkerCtor] = useState<null | (new () => Worker)>(null);
-  const worker = WorkerCtor ? useWorker(WorkerCtor) : null;
+  const worker = useWorker(WorkerCtor);
 
   useEffect(() => {
     import("@/pdf/workers/compress.worker.ts?worker").then((m) => setWorkerCtor(() => m.default));
