@@ -7,7 +7,7 @@ type Out =
   | { type: "error"; message: string };
 
 self.onmessage = async (e: MessageEvent<In>) => {
-  const post = (m: Out) => (self as any).postMessage(m);
+  const post = (m: Out, t?: Transferable[]) => (self as any).postMessage(m, t);
   try {
     const { file } = e.data;
     post({ type: "progress", value: 5 });
@@ -23,7 +23,7 @@ self.onmessage = async (e: MessageEvent<In>) => {
     const out = await pdf.save({ useObjectStreams: true, addDefaultPage: false });
 
     // Transfer ownership of the buffer (zero-copy)
-    post({ type: "result", data: out.buffer }, [out.buffer as any]);
+    post({ type: "result", data: out.buffer as ArrayBuffer }, [out.buffer as any]);
   } catch (err: any) {
     post({ type: "error", message: err?.message || "Compress failed" });
   }
