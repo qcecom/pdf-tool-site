@@ -1,0 +1,20 @@
+:root {
+  --bg: #0b0c10;
+  --card: #111319;
+  --muted: #97a1b5;
+  --text: #e9edf3;
+  --brand: #57a6ff;
+  --brand-ink: #001a33;
+  --border: #1a2030;
+  --radius: 16px;
+  --shadow: 0 6px 24px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.03) inset;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --text: #1b2430;
+    --brand-ink: #eaf3ff;
+    --border: #e7ecf5;
+  }
+}
