@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
+import { useMeta } from "@/app/hooks/useMeta";
 
 interface Result {
   score: number;
@@ -6,6 +9,7 @@ interface Result {
 }
 
 export default function JdMatch() {
+  useMeta({ title: "JD Match - ATS CV Toolkit", description: "Find missing keywords from job descriptions" });
   const [jd, setJd] = useState("");
   const [cv, setCv] = useState("");
   const [result, setResult] = useState<Result | null>(null);
@@ -33,31 +37,35 @@ export default function JdMatch() {
   const aiEnabled = import.meta.env.VITE_AI_ENABLED === "true";
 
   return (
-    <div>
-      <h2>JD Match</h2>
-      {!aiEnabled && <p>AI disabled in this build.</p>}
-      <textarea
-        placeholder="Paste Job Description"
-        value={jd}
-        onChange={(e) => setJd(e.target.value)}
-        rows={8}
-        cols={40}
-      />
-      <textarea
-        placeholder="Paste your CV text"
-        value={cv}
-        onChange={(e) => setCv(e.target.value)}
-        rows={8}
-        cols={40}
-      />
-      <button onClick={runMatch}>Match</button>
-      {result && (
-        <div>
-          <p>Score: {result.score}</p>
-          <p>Missing keywords: {result.missing.join(", ")}</p>
-        </div>
-      )}
-      <aside>Tip: Highlight missing keywords in your CV.</aside>
-    </div>
+    <>
+      <Header />
+      <main className="container">
+        <h2>JD Match</h2>
+        {!aiEnabled && <p>AI disabled in this build.</p>}
+        <textarea
+          placeholder="Paste Job Description"
+          value={jd}
+          onChange={(e) => setJd(e.target.value)}
+          rows={8}
+          cols={40}
+        />
+        <textarea
+          placeholder="Paste your CV text"
+          value={cv}
+          onChange={(e) => setCv(e.target.value)}
+          rows={8}
+          cols={40}
+        />
+        <button className="btn" onClick={runMatch}>Match</button>
+        {result && (
+          <div>
+            <p>Score: {result.score}</p>
+            <p>Missing keywords: {result.missing.join(", ")}</p>
+          </div>
+        )}
+        <aside style={{marginTop:12,color:"var(--muted)"}}>Tip: Highlight missing keywords in your CV.</aside>
+      </main>
+      <Footer />
+    </>
   );
 }

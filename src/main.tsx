@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import AppErrorBoundary from "./AppErrorBoundary";
+import "./ui/theme.css";
+import "./ui/ui.css";
 
 const routes: Record<string, () => Promise<{ default: React.ComponentType<any> }>> = {
   "/": () => import("@/app/routes/Home"),

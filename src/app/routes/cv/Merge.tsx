@@ -6,8 +6,12 @@ import FileList from "@/app/components/FileList";
 import { useWorker } from "@/app/hooks/useWorker";
 import { downloadBuffer } from "@/pdf/utils";
 import MergeWorker from "@/pdf/workers/mergeCv.worker?worker";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
+import { useMeta } from "@/app/hooks/useMeta";
 
 export default function Merge() {
+  useMeta({ title: "Merge PDFs - ATS CV Toolkit", description: "Combine CV and portfolio on-device" });
   const { run, progress, status, error, result } = useWorker(MergeWorker);
   const [files, setFiles] = useState<File[]>([]);
 
@@ -27,14 +31,20 @@ export default function Merge() {
   }, [status, result]);
 
   return (
-    <div>
-      <h2>Merge PDFs</h2>
-      <Dropzone onFile={handleFile} />
-      {files.length > 0 && <FileList files={files} onReorder={setFiles} />}
-      {files.length > 1 && <button onClick={startMerge}>Merge</button>}
-      {status === "working" && <ProgressBar progress={progress} />}
-      {error && <Toast message={error} onClose={() => {}} />}
-      <aside>Tip: Merge CV and portfolio then reorder.</aside>
-    </div>
+    <>
+      <Header />
+      <main className="container">
+        <h2>Merge PDFs</h2>
+        <Dropzone onFile={handleFile} />
+        {files.length > 0 && <FileList files={files} onReorder={setFiles} />}
+        {files.length > 1 && (
+          <button className="btn" onClick={startMerge}>Merge</button>
+        )}
+        {status === "working" && <ProgressBar progress={progress} />}
+        {error && <Toast message={error} onClose={() => {}} />}
+        <aside style={{marginTop:12,color:"var(--muted)"}}>Tip: Merge CV and portfolio then reorder.</aside>
+      </main>
+      <Footer />
+    </>
   );
 }
