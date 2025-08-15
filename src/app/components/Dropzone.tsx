@@ -1,15 +1,24 @@
 import { useRef } from "react";
 
+const DBG = import.meta.env.VITE_DEBUG === "true";
+
 export default function Dropzone({
   onFile, maxMB = 100
 }: { onFile: (file: File) => void; maxMB?: number }) {
   const ref = useRef<HTMLInputElement|null>(null);
 
   const handle = (file: File) => {
-    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
-    if (import.meta.env.VITE_DEBUG) console.log("file picked", file.name, file.size);
-    if (!isPdf) { alert("Please choose a PDF file."); return; }
-    if (file.size > maxMB * 1024 * 1024) { alert(`File too large (> ${maxMB}MB).`); return; }
+    const isPdf =
+      file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+    DBG && console.log("[dropzone] picked", file.name, file.size);
+    if (!isPdf) {
+      alert("Please choose a PDF file.");
+      return;
+    }
+    if (file.size > maxMB * 1024 * 1024) {
+      alert(`File too large (> ${maxMB}MB).`);
+      return;
+    }
     onFile(file);
   };
 

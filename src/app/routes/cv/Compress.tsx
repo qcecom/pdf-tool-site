@@ -6,18 +6,21 @@ import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
+const DBG = import.meta.env.VITE_DEBUG === "true";
+
 export default function CompressPage() {
   useMeta({ title: "Compress PDF - nouploadpdf.com", description: "Shrink your CV without uploading." });
-  const { run, progress, status, error, result } = useWorker(CompressWorker);
+  const { run, progress, status, error, result } = useWorker(CompressWorker, "compress");
 
   const onPick = async (file: File) => {
+    DBG && console.log("[compress] picked", file.name, file.size);
     const buf = await file.arrayBuffer();
-    if (import.meta.env.VITE_DEBUG) console.log("arrayBuffer", buf.byteLength);
     run({ file: buf, target: "2mb" }, [buf]);
   };
 
   useEffect(() => {
     if (status === "done" && result instanceof ArrayBuffer) {
+      DBG && console.log("[compress] finished", result.byteLength);
       const blob = new Blob([result], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -27,6 +30,10 @@ export default function CompressPage() {
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
   }, [status, result]);
+
+  useEffect(() => {
+    if (status === "error" && error) DBG && console.log("[compress] error", error);
+  }, [status, error]);
 
   return (
     <>

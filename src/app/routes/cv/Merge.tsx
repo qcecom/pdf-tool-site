@@ -10,25 +10,34 @@ import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
+const DBG = import.meta.env.VITE_DEBUG === "true";
+
 export default function Merge() {
   useMeta({ title: "Merge PDFs - nouploadpdf.com", description: "Combine CV and portfolio on-device" });
-  const { run, progress, status, error, result } = useWorker(MergeWorker);
+  const { run, progress, status, error, result } = useWorker(MergeWorker, "merge");
   const [files, setFiles] = useState<File[]>([]);
 
   const handleFile = (file: File) => {
+    DBG && console.log("[merge] picked", file.name, file.size);
     setFiles((prev) => [...prev, file]);
   };
 
   const startMerge = async () => {
+    DBG && console.log("[merge] start", files.length);
     const bufs = await Promise.all(files.map((f) => f.arrayBuffer()));
     run({ files: bufs }, bufs);
   };
 
   useEffect(() => {
     if (status === "done" && result instanceof ArrayBuffer) {
+      DBG && console.log("[merge] finished", result.byteLength);
       downloadBuffer(result, "merged.pdf");
     }
   }, [status, result]);
+
+  useEffect(() => {
+    if (status === "error" && error) DBG && console.log("[merge] error", error);
+  }, [status, error]);
 
   return (
     <>

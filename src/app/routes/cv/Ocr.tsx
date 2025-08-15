@@ -10,23 +10,37 @@ import { useMeta } from "@/app/hooks/useMeta";
 import { canUse, consume, isPro } from "@/pro/gating";
 import UpgradeModal from "@/app/components/UpgradeModal";
 
+const DBG = import.meta.env.VITE_DEBUG === "true";
+
 export default function Ocr() {
   useMeta({ title: "OCR - nouploadpdf.com", description: "Turn scanned CVs into editable text" });
-  const { run, progress, status, error, result } = useWorker(OcrWorker);
+  const { run, progress, status, error, result } = useWorker(OcrWorker, "ocr");
   const [text, setText] = useState("");
   const [lang, setLang] = useState<'eng' | 'vie'>('eng');
   const [up, setUp] = useState(false);
 
   const handleFile = async (file: File) => {
-    if (!canUse("ocr")) { setUp(true); return; }
+    if (!canUse("ocr")) {
+      DBG && console.log("[ocr] gated");
+      setUp(true);
+      return;
+    }
+    DBG && console.log("[ocr] picked", file.name, file.size, lang);
     const buf = await file.arrayBuffer();
     run({ file: buf, lang }, [buf]);
     consume("ocr");
   };
 
   useEffect(() => {
-    if (status === "done" && typeof result === "string") setText(result);
+    if (status === "done" && typeof result === "string") {
+      DBG && console.log("[ocr] finished", result.length);
+      setText(result);
+    }
   }, [status, result]);
+
+  useEffect(() => {
+    if (status === "error" && error) DBG && console.log("[ocr] error", error);
+  }, [status, error]);
 
   return (
     <>
