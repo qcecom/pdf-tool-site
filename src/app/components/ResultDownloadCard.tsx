@@ -24,8 +24,8 @@ export default function ResultDownloadCard({ srcName, srcSize, outName, outBlob,
     <div className="card" style={{ marginTop: 12 }}>
       <h3 style={{ marginTop: 0 }}>Result</h3>
       <div className="mono" style={{ display: "grid", gap: 4 }}>
-        <div>Source file: <strong>{srcName}</strong>{srcSize!=null ? ` — ${formatBytes(srcSize)}` : ""}</div>
-        <div>Output file: <strong>{outName}</strong> — {formatBytes(outSize)}</div>
+        <div>Source file: <strong>{srcName}</strong>{srcSize!=null ? ` - ${formatBytes(srcSize)}` : ""}</div>
+        <div>Output file: <strong>{outName}</strong> - {formatBytes(outSize)}</div>
       </div>
       <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
         <button className="btn" onClick={handleDownload} aria-label="Download processed file">Download</button>

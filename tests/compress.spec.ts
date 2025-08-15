@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { makeSamplePdf } from "./helpers/makeSamplePdf";
 
+test.skip(process.env.SMOKE_MODE === 'lite');
+
 test("Compress shows Download button and file details", async ({ page }) => {
   await page.goto("/cv/compress");
   const file = await makeSamplePdf("My ATS CV");
