@@ -8,6 +8,7 @@ export default function Footer() {
           <Link href="/privacy">Privacy</Link>
           <Link href="/security">Security</Link>
           <Link href="/changelog">Changelog</Link>
+          <Link href="/contact">Contact</Link>
         </div>
       </div>
     </footer>

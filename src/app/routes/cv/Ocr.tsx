@@ -7,27 +7,21 @@ import OcrWorker from "@/pdf/workers/ocrCv.worker?worker";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
+import { canUse, consume, isPro } from "@/pro/gating";
+import UpgradeModal from "@/app/components/UpgradeModal";
 
 export default function Ocr() {
   useMeta({ title: "OCR - ATS CV Toolkit", description: "Turn scanned CVs into editable text" });
   const { run, progress, status, error, result } = useWorker(OcrWorker);
   const [text, setText] = useState("");
   const [lang, setLang] = useState<'eng' | 'vie'>('eng');
+  const [up, setUp] = useState(false);
 
   const handleFile = async (file: File) => {
-    const key = "ocr-limit";
-    const today = new Date().toDateString();
-    const stored = JSON.parse(localStorage.getItem(key) || "{}");
-    if (stored.date !== today) stored.count = 0;
-    if (stored.count >= 1 && import.meta.env.VITE_PRO !== "true") {
-      alert("Free tier: 1 OCR per day");
-      return;
-    }
+    if (!canUse("ocr")) { setUp(true); return; }
     const buf = await file.arrayBuffer();
     run({ file: buf, lang });
-    stored.date = today;
-    stored.count = (stored.count || 0) + 1;
-    localStorage.setItem(key, JSON.stringify(stored));
+    consume("ocr");
   };
 
   useEffect(() => {
@@ -39,6 +33,7 @@ export default function Ocr() {
       <Header />
       <main className="container">
         <h2>OCR</h2>
+        <p style={{color:"var(--muted)"}}>{isPro()?"Pro":"Free 1/day"}</p>
         <label style={{display:"block",marginBottom:8}}>
           Language:
           <select value={lang} onChange={(e) => setLang(e.target.value as 'eng' | 'vie')}>
@@ -51,6 +46,7 @@ export default function Ocr() {
         {error && <Toast message={error} onClose={() => {}} />}
         {text && <textarea value={text} readOnly rows={10} cols={40} />}
         <aside style={{marginTop:12,color:"var(--muted)"}}>OCR quality varies; re-type critical sections.</aside>
+        <UpgradeModal open={up} onClose={()=>setUp(false)}/>
       </main>
       <Footer />
     </>

@@ -10,4 +10,5 @@ interface ImportMetaEnv {
   readonly VITE_BILLING_ENABLED?: string;
   readonly VITE_ANALYTICS_ENABLED?: string;
   readonly VITE_PRO?: string;
+  readonly VITE_PRO_CODE?: string;
 }

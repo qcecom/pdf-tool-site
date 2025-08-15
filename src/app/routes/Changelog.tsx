@@ -1,7 +1,7 @@
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
-import changes from "./changelog.json";
+import changes from "@/changelog.json";
 
 export default function Changelog() {
   useMeta({ title: "Changelog - ATS CV Toolkit", description: "Release history and updates" });

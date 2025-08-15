@@ -11,11 +11,14 @@ const routes: Record<string, () => Promise<{ default: React.ComponentType<any> }
   "/cv/ats-export": () => import("@/app/routes/cv/AtsExport"),
   "/cv/ocr": () => import("@/app/routes/cv/Ocr"),
   "/cv/jd-match": () => import("@/app/routes/cv/JdMatch"),
+  "/cv/font-check": () => import("@/app/routes/cv/FontCheck"),
+  "/cv/metadata-scrub": () => import("@/app/routes/cv/MetadataScrub"),
   "/why-ats": () => import("@/app/routes/WhyAts"),
   "/privacy": () => import("@/app/routes/Privacy"),
   "/security": () => import("@/app/routes/Security"),
   "/faq": () => import("@/app/routes/Faq"),
   "/changelog": () => import("@/app/routes/Changelog"),
+  "/contact": () => import("@/app/routes/Contact"),
 };
 
 const loadRoute = (routes[window.location.pathname] || routes["/"]) as () => Promise<{
