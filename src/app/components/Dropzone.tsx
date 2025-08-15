@@ -39,8 +39,8 @@ export default function Dropzone({ onFile }: Props) {
     >
       <p>
         Drop PDF here or
-        <button type="button" onClick={() => inputRef.current?.click()}>
-          Choose File
+        <button className="btn" type="button" onClick={() => inputRef.current?.click()}>
+          Select PDF
         </button>
       </p>
       <input
