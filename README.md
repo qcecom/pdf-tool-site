@@ -1,6 +1,23 @@
 # pdf-tool-site
-A fast, minimal, and easy-to-use PDF tool website built with Vite + React and deployed on Netlify. Supports merging, splitting, compressing, and converting PDFs.
 
-## Environment Variables
+A fast, minimal PDF tool running fully in your browser. Merge, split and compress PDFs without uploading anything.
 
-`MOCK_PROGRESS` – set to `1` to enable mocked upload and processing progress for local development. When enabled, API routes under `/api/upload`, `/api/process`, and `/api/status` simulate the complete job lifecycle with Server-Sent Events.
+## Development
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Type checking, linting and build:
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm build
+```
+
+## Notes
+
+- Files larger than **50MB** will trigger a warning; consider splitting first.
+- All processing happens client-side. Your PDFs never leave your device.
