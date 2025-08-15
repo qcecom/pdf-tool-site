@@ -5,7 +5,9 @@ type WorkerEvent =
   | { type: "result"; data: any }
   | { type: "error"; message: string };
 
-export function useWorker(WorkerCtor: new () => Worker) {
+const DBG = import.meta.env.VITE_DEBUG === "true";
+
+export function useWorker(WorkerCtor: new () => Worker, label = "worker") {
   const ref = useRef<Worker | null>(null);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState<"idle" | "working" | "done" | "error">("idle");
@@ -18,16 +20,16 @@ export function useWorker(WorkerCtor: new () => Worker) {
     w.onmessage = (e: MessageEvent<WorkerEvent>) => {
       const m = e.data;
       if (m.type === "progress") {
-        if (import.meta.env.VITE_DEBUG) console.log("worker progress", m.value);
+        DBG && console.log(`[${label}] progress`, m.value);
         setProgress(m.value);
       }
       if (m.type === "result") {
-        if (import.meta.env.VITE_DEBUG) console.log("worker done");
+        DBG && console.log(`[${label}] done`);
         setResult(m.data);
         setStatus("done");
       }
       if (m.type === "error") {
-        if (import.meta.env.VITE_DEBUG) console.log("worker error", m.message);
+        DBG && console.log(`[${label}] error`, m.message);
         setError(m.message);
         setStatus("error");
       }
@@ -36,7 +38,7 @@ export function useWorker(WorkerCtor: new () => Worker) {
   }, [WorkerCtor]);
 
   const run = (payload: unknown, transfer?: Transferable[]) => {
-    if (import.meta.env.VITE_DEBUG) console.log("worker start", payload);
+    DBG && console.log(`[${label}] start`, payload);
     setStatus("working");
     setProgress(0);
     setError(null);
