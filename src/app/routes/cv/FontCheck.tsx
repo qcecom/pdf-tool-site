@@ -11,9 +11,9 @@ interface FontInfo{ name:string; count:number }
 interface FontResult{ fonts:FontInfo[]; warnings:string[]; recommended:string[] }
 
 export default function FontCheck(){
-  useMeta({title:"Font Check - ATS CV Toolkit",description:"Detect risky fonts in your CV"});
+  useMeta({title:"Font Check - nouploadpdf.com",description:"Detect risky fonts in your CV"});
   const {run,progress,status,error,result}=useWorker(FontWorker);
-  const handleFile=async(file:File)=>{ const buf=await file.arrayBuffer(); run({file:buf}); };
+  const handleFile=async(file:File)=>{ const buf=await file.arrayBuffer(); run({file:buf},[buf]); };
   const res=result as FontResult | null;
   return(
     <>

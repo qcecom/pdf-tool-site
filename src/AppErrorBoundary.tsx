@@ -17,7 +17,8 @@ export default class AppErrorBoundary extends React.Component<Props, State> {
   }
 
   override componentDidCatch(error: unknown, errorInfo: unknown) {
-    console.error(error, errorInfo);
+    if (import.meta.env.VITE_DEBUG)
+      console.error("error", window.location.pathname, error, errorInfo);
   }
 
   override render() {

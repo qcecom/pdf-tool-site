@@ -10,13 +10,13 @@ import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
 export default function AtsExport() {
-  useMeta({ title: "ATS Export - ATS CV Toolkit", description: "Extract text ready for ATS parsers" });
+  useMeta({ title: "ATS Export - nouploadpdf.com", description: "Extract text ready for ATS parsers" });
   const { run, progress, status, error, result } = useWorker(ExportWorker);
   const [text, setText] = useState("");
 
   const handleFile = async (file: File) => {
     const buf = await file.arrayBuffer();
-    run({ file: buf });
+    run({ file: buf }, [buf]);
   };
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
 export default function Home() {
-  useMeta({ title: "ATS CV Toolkit", description: "Fast, private CV PDF tools" });
+  useMeta({ title: "nouploadpdf.com", description: "Fast, private CV PDF tools" });
   return (
     <>
       <Header />

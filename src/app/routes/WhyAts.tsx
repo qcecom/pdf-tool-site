@@ -4,7 +4,7 @@ import { useMeta } from "@/app/hooks/useMeta";
 
 export default function WhyAts() {
   useMeta({
-    title: "Why ATS - ATS CV Toolkit",
+    title: "Why ATS - nouploadpdf.com",
     description: "How applicant tracking systems read your PDF and why on-device tools matter",
   });
   return (

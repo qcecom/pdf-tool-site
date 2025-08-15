@@ -17,12 +17,17 @@ export function useWorker(WorkerCtor: new () => Worker) {
     ref.current = w;
     w.onmessage = (e: MessageEvent<WorkerEvent>) => {
       const m = e.data;
-      if (m.type === "progress") setProgress(m.value);
+      if (m.type === "progress") {
+        if (import.meta.env.VITE_DEBUG) console.log("worker progress", m.value);
+        setProgress(m.value);
+      }
       if (m.type === "result") {
+        if (import.meta.env.VITE_DEBUG) console.log("worker done");
         setResult(m.data);
         setStatus("done");
       }
       if (m.type === "error") {
+        if (import.meta.env.VITE_DEBUG) console.log("worker error", m.message);
         setError(m.message);
         setStatus("error");
       }
@@ -30,12 +35,13 @@ export function useWorker(WorkerCtor: new () => Worker) {
     return () => w.terminate();
   }, [WorkerCtor]);
 
-  const run = (payload: unknown) => {
+  const run = (payload: unknown, transfer?: Transferable[]) => {
+    if (import.meta.env.VITE_DEBUG) console.log("worker start", payload);
     setStatus("working");
     setProgress(0);
     setError(null);
     setResult(null);
-    ref.current?.postMessage(payload);
+    ref.current?.postMessage(payload, transfer || []);
   };
 
   return { run, progress, status, error, result };

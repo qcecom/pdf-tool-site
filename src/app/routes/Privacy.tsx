@@ -3,7 +3,7 @@ import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
 export default function Privacy() {
-  useMeta({ title: "Privacy - ATS CV Toolkit", description: "We do not upload or store your files." });
+  useMeta({ title: "Privacy - nouploadpdf.com", description: "We do not upload or store your files." });
   return (
     <>
       <Header />

@@ -4,7 +4,7 @@ import { useMeta } from "@/app/hooks/useMeta";
 import changes from "@/changelog.json";
 
 export default function Changelog() {
-  useMeta({ title: "Changelog - ATS CV Toolkit", description: "Release history and updates" });
+  useMeta({ title: "Changelog - nouploadpdf.com", description: "Release history and updates" });
   return (
     <>
       <Header />

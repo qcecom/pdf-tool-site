@@ -10,11 +10,11 @@ import Footer from "@/app/components/Footer";
 import { useMeta } from "@/app/hooks/useMeta";
 
 export default function MetadataScrub(){
-  useMeta({title:"Metadata Scrub - ATS CV Toolkit",description:"Remove hidden PDF metadata"});
+  useMeta({title:"Metadata Scrub - nouploadpdf.com",description:"Remove hidden PDF metadata"});
   const {run,progress,status,error,result}=useWorker(ScrubWorker);
   const handleFile=async(file:File)=>{
     const buf=await file.arrayBuffer();
-    run({file:buf});
+    run({file:buf},[buf]);
   };
   useEffect(()=>{if(status==="done"&&result instanceof ArrayBuffer){downloadBuffer(result,"scrubbed.pdf");}},[status,result]);
   return(

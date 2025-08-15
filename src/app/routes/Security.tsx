@@ -4,7 +4,7 @@ import { useMeta } from "@/app/hooks/useMeta";
 
 export default function Security() {
   useMeta({
-    title: "Security - ATS CV Toolkit",
+    title: "Security - nouploadpdf.com",
     description: "On-device processing with Web Workers and transferable buffers",
   });
   return (

@@ -5,7 +5,7 @@ export default function Header(){
   return(
     <header className="header container" role="banner">
       <Link href="/" className="brand" ariaLabel="Home">
-        <Logo/><strong>ATS CV Toolkit</strong>
+        <Logo/><strong>nouploadpdf.com</strong>
       </Link>
       <nav className="nav" aria-label="Primary">
         <Link href="/#tools">Tools</Link>
@@ -13,6 +13,8 @@ export default function Header(){
         <Link href="/privacy">Privacy</Link>
         <Link href="/security">Security</Link>
         <Link href="/faq">FAQ</Link>
+        <Link href="/changelog">Changelog</Link>
+        <Link href="/contact">Contact</Link>
       </nav>
     </header>
   );
