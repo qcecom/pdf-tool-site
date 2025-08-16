@@ -1,4 +1,4 @@
-import { getDocument } from 'pdfjs-dist';
+import { getPdfFromData } from '../utils/safePdf';
 import { ensurePdfWorker } from '../utils/ensurePdfWorker';
 const ATS_GOOD=["Arial","Calibri","Helvetica","Times New Roman","Times-Roman"];
 const ATS_RISK=["Garamond","Courier","Papyrus","Comic Sans","Symbol"];
@@ -7,7 +7,7 @@ self.onmessage=async(e:MessageEvent<{file:ArrayBuffer;maxPages?:number}>)=>{
   try{
     await ensurePdfWorker();
     const {file,maxPages=20}=e.data;
-    const pdf=(await getDocument({data:file}).promise);
+    const pdf=(await getPdfFromData(file));
     const seen:Record<string,number>={}; const total=Math.min(pdf.numPages,maxPages);
     for(let i=1;i<=total;i++){
       const p=await pdf.getPage(i); const c=await p.getTextContent();

@@ -1,3 +1,4 @@
+import { getPdfFromData } from '../utils/safePdf';
 import { jsPDF } from 'jspdf';
 import { renderPageBlob } from '../utils/pdfCanvas';
 import { ensurePdfWorker } from '../utils/ensurePdfWorker';
@@ -28,8 +29,7 @@ export function getOcrEngine(){ return ocrEngine; }
 export async function searchableImage(data:ArrayBuffer, cfg:Cfg): Promise<Blob> {
   ocrEngine = null;
   await ensurePdfWorker();
-  const { getDocument } = await import('pdfjs-dist');
-  const pdf = await getDocument({ data }).promise;
+  const pdf = await getPdfFromData(data);
   const doc = new jsPDF({ unit:'pt', compress:true });
 
   for (let p=1;p<=pdf.numPages;p++){
