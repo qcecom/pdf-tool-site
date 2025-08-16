@@ -17,8 +17,8 @@ export default defineConfig({
   worker: { format: 'es' },
   resolve: { dedupe: ['react', 'react-dom'] },
   build: {
-    chunkSizeWarningLimit: 500,
     manifest: 'manifest.json',
+    chunkSizeWarningLimit: 500,
     rollupOptions: {
       external: ['tesseract.js'],
       output: {
