@@ -11,6 +11,7 @@ type Props = {
 
 export default function ResultDownloadCard({ srcName, srcSize, outName, outBlob, meta, onReset }: Props) {
   const outSize = outBlob.size;
+  const deltaPct = srcSize != null ? ((outSize - srcSize) / srcSize) * 100 : null;
   const badges: string[] = [];
   if (meta?.pipeline !== 'rasterAll') {
     badges.push('ATS-safe', 'Searchable');
@@ -18,6 +19,8 @@ export default function ResultDownloadCard({ srcName, srcSize, outName, outBlob,
   if (meta?.pipeline !== 'losslessClean') {
     badges.push('Lossy');
   }
+  if (meta?.ocr === 'tesseract.js') badges.push('OCR: tesseract.js');
+  if (meta?.ocr === 'stub') badges.push('OCR offline (stub)');
   const hint = srcSize != null && outSize > srcSize
     ? 'This preset kept vector text or metadata; try Smart or lower DPI/quality.'
     : null;
@@ -37,6 +40,9 @@ export default function ResultDownloadCard({ srcName, srcSize, outName, outBlob,
       <div className="mono" style={{ display: "grid", gap: 4 }}>
         <div>Source file: <strong>{srcName}</strong>{srcSize!=null ? ` - ${formatBytes(srcSize)}` : ""}</div>
         <div>Output file: <strong>{outName}</strong> - {formatBytes(outSize)}</div>
+        {deltaPct!=null && (
+          <div>Δ {deltaPct>0?'+':''}{deltaPct.toFixed(1)}%</div>
+        )}
       </div>
       {badges.length > 0 && (
         <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>

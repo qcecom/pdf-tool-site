@@ -2,7 +2,7 @@ import { classifyDoc } from '../utils/classifyDoc';
 import { supportsWebP } from '../utils/detectWebP';
 import { iterateForTarget, BuildCfg } from '../utils/iterateForTarget';
 import { rasterAll } from '../pipelines/rasterAll';
-import { searchableImage } from '../pipelines/searchableImage';
+import { searchableImage, getOcrEngine } from '../pipelines/searchableImage';
 import { losslessClean } from '../pipelines/losslessClean';
 
 type Preset = 'smart'|'ats_safe'|'email_2mb'|'smallest';
@@ -40,7 +40,8 @@ self.onmessage = async (e: MessageEvent<Msg>) => {
       : (preset==='ats_safe' && kind==='TEXT_HEAVY') ? 'losslessClean'
       : (kind==='TEXT_HEAVY' ? 'losslessClean' : 'searchableImage');
 
-    self.postMessage({ type:'ok', blob: out.blob, meta:{ cfg: out.cfg, preset, kind, pipeline } }, undefined as any);
+    const ocr = getOcrEngine();
+    self.postMessage({ type:'ok', blob: out.blob, meta:{ cfg: out.cfg, preset, kind, pipeline, ocr } }, undefined as any);
   } catch (err) {
     self.postMessage({ type:'error', message: String(err) });
   }

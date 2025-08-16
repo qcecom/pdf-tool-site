@@ -40,7 +40,7 @@ export default function CompressPage() {
 
   return (
     <div className="container">
-      <h2>Compress</h2>
+      <h2>Compress <a href="/cv/samples" className="text-sm underline" style={{marginLeft:8}}>Samples</a></h2>
       <div style={{ marginBottom: 8 }}>
         {[
           { id: "SMART", label: "Smart" },
