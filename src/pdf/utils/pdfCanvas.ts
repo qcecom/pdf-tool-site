@@ -1,4 +1,4 @@
-import { getDocument } from 'pdfjs-dist';
+import { getPdfFromData } from './safePdf';
 import { ensurePdfWorker } from './ensurePdfWorker';
 
 export type RenderOpts = {
@@ -7,7 +7,7 @@ export type RenderOpts = {
 
 export async function renderPageBlob(opts: RenderOpts): Promise<{blob:Blob; width:number; height:number}> {
   await ensurePdfWorker();
-  const pdf = await getDocument({ data: opts.data }).promise;
+  const pdf = await getPdfFromData(opts.data);
   const page = await pdf.getPage(opts.page);
   const vp = page.getViewport({ scale: opts.dpi / 72 });
 
@@ -38,7 +38,7 @@ export async function renderPageBlob(opts: RenderOpts): Promise<{blob:Blob; widt
 
 export async function textItemsForPage(data: ArrayBuffer, pageNo: number){
   await ensurePdfWorker();
-  const pdf = await getDocument({ data }).promise;
+  const pdf = await getPdfFromData(data);
   const page = await pdf.getPage(pageNo);
   return page.getTextContent();
 }

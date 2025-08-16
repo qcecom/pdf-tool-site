@@ -1,9 +1,9 @@
-import { getDocument } from 'pdfjs-dist';
+import { getPdfFromData } from './safePdf';
 import { ensurePdfWorker } from './ensurePdfWorker';
 
 export async function classifyDoc(ab: ArrayBuffer, pagesToProbe = 2) {
   await ensurePdfWorker();
-  const pdf = await getDocument({ data: ab }).promise;
+  const pdf = await getPdfFromData(ab);
   let textGlyphs = 0, items = 0;
   const probe = Math.min(pdf.numPages, pagesToProbe);
   for (let p = 1; p <= probe; p++) {

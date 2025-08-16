@@ -1,3 +1,4 @@
+import { getPdfFromData } from '../utils/safePdf';
 import { jsPDF } from 'jspdf';
 import { renderPageBlob } from '../utils/pdfCanvas';
 import { ensurePdfWorker } from '../utils/ensurePdfWorker';
@@ -6,8 +7,7 @@ export type RasterCfg = { dpi:number; quality:number; format:'jpeg'|'webp'; onPr
 
 export async function rasterAll(data:ArrayBuffer, cfg:RasterCfg): Promise<Blob> {
   await ensurePdfWorker();
-  const { getDocument } = await import('pdfjs-dist');
-  const pdf = await getDocument({ data }).promise;
+  const pdf = await getPdfFromData(data);
   let out: jsPDF | null = null;
 
   for (let p=1;p<=pdf.numPages;p++){

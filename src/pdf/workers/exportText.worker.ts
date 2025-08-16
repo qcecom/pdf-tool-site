@@ -1,12 +1,9 @@
-import { getDocument } from "pdfjs-dist";
+import { getPdfFromData } from "../utils/safePdf";
 import type { ExportTextPayload } from "@/pdf/types";
-import { ensurePdfWorker } from "../utils/ensurePdfWorker";
 
 self.onmessage = async (e: MessageEvent<ExportTextPayload>) => {
   try {
-    await ensurePdfWorker();
-    const loadingTask = getDocument({ data: e.data.file });
-    const pdf = await loadingTask.promise;
+    const pdf = await getPdfFromData(e.data.file);
     let text = "";
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
