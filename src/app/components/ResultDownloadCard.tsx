@@ -5,11 +5,22 @@ type Props = {
   srcSize?: number;          // in bytes
   outName: string;
   outBlob: Blob;             // Blob to download
+  meta?: any;
   onReset?: () => void;
 };
 
-export default function ResultDownloadCard({ srcName, srcSize, outName, outBlob, onReset }: Props) {
+export default function ResultDownloadCard({ srcName, srcSize, outName, outBlob, meta, onReset }: Props) {
   const outSize = outBlob.size;
+  const badges: string[] = [];
+  if (meta?.pipeline !== 'rasterAll') {
+    badges.push('ATS-safe', 'Searchable');
+  }
+  if (meta?.pipeline !== 'losslessClean') {
+    badges.push('Lossy');
+  }
+  const hint = srcSize != null && outSize > srcSize
+    ? 'This preset kept vector text or metadata; try Smart or lower DPI/quality.'
+    : null;
 
   const handleDownload = () => {
     const url = URL.createObjectURL(outBlob);
@@ -27,6 +38,14 @@ export default function ResultDownloadCard({ srcName, srcSize, outName, outBlob,
         <div>Source file: <strong>{srcName}</strong>{srcSize!=null ? ` - ${formatBytes(srcSize)}` : ""}</div>
         <div>Output file: <strong>{outName}</strong> - {formatBytes(outSize)}</div>
       </div>
+      {badges.length > 0 && (
+        <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
+          {badges.map((b) => (
+            <span key={b} style={{ padding: '2px 6px', background: '#eee', borderRadius: 4, fontSize: 12 }}>{b}</span>
+          ))}
+        </div>
+      )}
+      {hint && <p className="mono" style={{ color: 'orange', marginTop: 8 }}>{hint}</p>}
       <div style={{ display: "flex", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
         <button className="btn" onClick={handleDownload} aria-label="Download processed file">Download</button>
         {onReset && <button className="btn ghost" onClick={onReset}>Process another</button>}

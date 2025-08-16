@@ -13,7 +13,10 @@
     "resolveJsonModule": true,
     "types": ["vite/client"],
     "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] }
+    "paths": {
+      "@/*": ["src/*"],
+      "tesseract.js": ["src/stubs/tesseract"]
+    }
   },
   "include": ["src", "env.d.ts"]
 }
