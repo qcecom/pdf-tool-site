@@ -18,6 +18,7 @@ export default defineConfig({
   resolve: { dedupe: ['react', 'react-dom'] },
   build: {
     chunkSizeWarningLimit: 500,
+    manifest: 'manifest.json',
     rollupOptions: {
       external: ['tesseract.js'],
       output: {
@@ -30,5 +31,6 @@ export default defineConfig({
         }
       }
     }
-  }
+  },
+  esbuild: { legalComments: 'none' }
 });

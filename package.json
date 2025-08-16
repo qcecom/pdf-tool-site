@@ -14,7 +14,7 @@
     "test:smoke": "SMOKE_MODE=lite playwright test -c playwright.config.ts",
     "test:smoke:full": "playwright test",
     "postinstall": "playwright install --with-deps || true",
-    "size": "node scripts/size-guard.mjs || size-limit"
+    "size": "node scripts/size-guard.mjs"
   },
   "dependencies": {
     "jspdf": "^2.5.1",
@@ -26,10 +26,6 @@
     "tesseract.js": "^4.1.4"
   },
   "devDependencies": {
-    "@size-limit/file": "^11.2.0",
-    "size-limit": "^11.2.0",
-    "gzip-size": "^7.0.0",
-    "globby": "^11.1.0",
     "@playwright/test": "^1.41.2",
     "@types/jspdf": "^2.0.0",
     "@types/node": "^20.8.4",
@@ -51,11 +47,5 @@
   },
   "imports": {
     "rollup-plugin-visualizer": "./scripts/rollup-plugin-visualizer.js"
-  },
-  "size-limit": [
-    {
-      "path": "dist/assets/*.js",
-      "limit": "40 KB"
-    }
-  ]
+  }
 }
