@@ -14,7 +14,8 @@
     "test:smoke": "SMOKE_MODE=lite playwright test -c playwright.config.ts",
     "test:smoke:full": "playwright test",
     "postinstall": "playwright install --with-deps || true",
-    "size": "node scripts/size-guard.mjs"
+    "size": "node scripts/size-guard.mjs",
+    "audit": "node scripts/audit.mjs"
   },
   "dependencies": {
     "jspdf": "^2.5.1",
