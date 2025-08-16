@@ -1,13 +1,13 @@
-// @ts-ignore
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
-(pdfjs as any).GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+import { getDocument } from 'pdfjs-dist';
+import { ensurePdfWorker } from '../utils/ensurePdfWorker';
 const ATS_GOOD=["Arial","Calibri","Helvetica","Times New Roman","Times-Roman"];
 const ATS_RISK=["Garamond","Courier","Papyrus","Comic Sans","Symbol"];
 self.onmessage=async(e:MessageEvent<{file:ArrayBuffer;maxPages?:number}>)=>{
   const post=(m:any)=>(self as any).postMessage(m);
   try{
+    await ensurePdfWorker();
     const {file,maxPages=20}=e.data;
-    const pdf=(await pdfjs.getDocument({data:file}).promise);
+    const pdf=(await getDocument({data:file}).promise);
     const seen:Record<string,number>={}; const total=Math.min(pdf.numPages,maxPages);
     for(let i=1;i<=total;i++){
       const p=await pdf.getPage(i); const c=await p.getTextContent();

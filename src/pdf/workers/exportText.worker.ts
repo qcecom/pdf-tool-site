@@ -1,10 +1,10 @@
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+import { getDocument } from "pdfjs-dist";
 import type { ExportTextPayload } from "@/pdf/types";
-
-GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+import { ensurePdfWorker } from "../utils/ensurePdfWorker";
 
 self.onmessage = async (e: MessageEvent<ExportTextPayload>) => {
   try {
+    await ensurePdfWorker();
     const loadingTask = getDocument({ data: e.data.file });
     const pdf = await loadingTask.promise;
     let text = "";
