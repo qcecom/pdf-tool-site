@@ -13,6 +13,7 @@ const routes: Record<string, () => Promise<{ default: React.ComponentType<any> }
   "/cv/jd-match": () => import("@/app/routes/cv/JdMatch"),
   "/cv/font-check": () => import("@/app/routes/cv/FontCheck"),
   "/cv/metadata-scrub": () => import("@/app/routes/cv/MetadataScrub"),
+  "/cv/samples": () => import("@/app/routes/cv/Samples"),
   "/why-ats": () => import("@/app/routes/WhyAts"),
   "/privacy": () => import("@/app/routes/Privacy"),
   "/security": () => import("@/app/routes/Security"),

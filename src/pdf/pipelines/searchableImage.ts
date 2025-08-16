@@ -4,15 +4,28 @@ import { renderPageBlob } from '../utils/pdfCanvas';
 type Cfg = { dpi:number; quality:number; format:'jpeg'|'webp'; lang?:string; onProgress?:(p:any)=>void };
 
 let tesseractWorker: any | null = null;
+let ocrEngine: 'tesseract.js'|'stub'|null = null;
 async function getOcrWorker(lang='eng'){
-  if (!tesseractWorker){
-    const mod = await import('../../stubs/tesseract');
-    tesseractWorker = await mod.createWorker(lang);
+  if (tesseractWorker) return tesseractWorker;
+  try {
+    const { createWorker } = await import('tesseract.js');
+    const worker = await createWorker({ langPath: 'https://tessdata.projectnaptha.com/4.0.0' });
+    await worker.loadLanguage(lang);
+    await worker.initialize(lang);
+    ocrEngine = 'tesseract.js';
+    tesseractWorker = worker;
+    return worker;
+  } catch (e) {
+    const { createWorker } = await import('../../stubs/tesseract');
+    ocrEngine = 'stub';
+    tesseractWorker = await createWorker(lang);
+    return tesseractWorker;
   }
-  return tesseractWorker;
 }
+export function getOcrEngine(){ return ocrEngine; }
 
 export async function searchableImage(data:ArrayBuffer, cfg:Cfg): Promise<Blob> {
+  ocrEngine = null;
   const { getDocument } = await import('pdfjs-dist');
   const pdf = await getDocument({ data }).promise;
   const doc = new jsPDF({ unit:'pt', compress:true });
