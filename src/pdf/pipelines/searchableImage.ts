@@ -1,5 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { renderPageBlob } from '../utils/pdfCanvas';
+import { ensurePdfWorker } from '../utils/ensurePdfWorker';
 
 type Cfg = { dpi:number; quality:number; format:'jpeg'|'webp'; lang?:string; onProgress?:(p:any)=>void };
 
@@ -26,6 +27,7 @@ export function getOcrEngine(){ return ocrEngine; }
 
 export async function searchableImage(data:ArrayBuffer, cfg:Cfg): Promise<Blob> {
   ocrEngine = null;
+  await ensurePdfWorker();
   const { getDocument } = await import('pdfjs-dist');
   const pdf = await getDocument({ data }).promise;
   const doc = new jsPDF({ unit:'pt', compress:true });

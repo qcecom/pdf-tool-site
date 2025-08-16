@@ -1,9 +1,11 @@
 import { jsPDF } from 'jspdf';
 import { renderPageBlob } from '../utils/pdfCanvas';
+import { ensurePdfWorker } from '../utils/ensurePdfWorker';
 
 export type RasterCfg = { dpi:number; quality:number; format:'jpeg'|'webp'; onProgress?:(p:any)=>void };
 
 export async function rasterAll(data:ArrayBuffer, cfg:RasterCfg): Promise<Blob> {
+  await ensurePdfWorker();
   const { getDocument } = await import('pdfjs-dist');
   const pdf = await getDocument({ data }).promise;
   let out: jsPDF | null = null;
@@ -21,6 +23,6 @@ export async function rasterAll(data:ArrayBuffer, cfg:RasterCfg): Promise<Blob> 
   return out!.output('blob');
 }
 
-function blobToDataURL(b:Blob){ 
+function blobToDataURL(b:Blob){
   return new Promise<string>(res => { const r=new FileReader(); r.onload=()=>res(r.result as string); r.readAsDataURL(b); });
 }
