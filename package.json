@@ -13,13 +13,19 @@
     "build:stats": "vite build && echo 'Open dist/stats.html' || true",
     "test:smoke": "SMOKE_MODE=lite playwright test -c playwright.config.ts",
     "test:smoke:full": "playwright test",
-    "postinstall": "playwright install --with-deps || true"
+    "postinstall": "playwright install --with-deps || true",
+    "size": "size-limit"
   },
   "dependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^4.3.136"
+    "pdfjs-dist": "^4.3.136",
+    "jspdf": "^2.5.1",
+    "tesseract.js": "^4.1.1",
+    "localforage": "^1.10.0",
+    "size-limit": "^11.0.0",
+    "@size-limit/file": "^11.0.0"
   },
   "devDependencies": {
     "typescript": "^5.2.2",
@@ -43,5 +49,8 @@
   },
   "imports": {
     "rollup-plugin-visualizer": "./scripts/rollup-plugin-visualizer.js"
-  }
+  },
+  "size-limit": [
+    { "path": "dist/assets/*.js", "limit": "40 KB" }
+  ]
 }

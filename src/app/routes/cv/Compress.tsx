@@ -8,10 +8,11 @@ import { useState } from "react";
 const DBG = import.meta.env.VITE_DEBUG === "true";
 
 export default function CompressPage() {
-  const { run, progress, status, error, result } = useWorker(SmartWorker, "smart-compress");
+  const { run, cancel, progress, note, status, error, result } = useWorker(SmartWorker, "smart-compress");
   const [srcFile, setSrcFile] = useState<File | null>(null);
   const [outBlob, setOutBlob] = useState<Blob | null>(null);
   const [outName, setOutName] = useState<string>("");
+  const [meta, setMeta] = useState<any>(null);
   const [preset, setPreset] = useState<'SMART' | 'ATS_SAFE' | 'EMAIL' | 'SMALLEST'>('SMART');
 
   const onPick = async (file: File) => {
@@ -19,12 +20,19 @@ export default function CompressPage() {
     setOutBlob(null);
     setOutName("");
     DBG && console.log("[compress] picked", file.name, file.size);
-    run({ file, preset });
+    const presetKey = {
+      SMART: 'smart',
+      ATS_SAFE: 'ats_safe',
+      EMAIL: 'email_2mb',
+      SMALLEST: 'smallest',
+    }[preset];
+    run({ file, preset: presetKey as any, opts: {} });
   };
 
   // Convert worker result to Blob and prepare names
-  if (status === "done" && result instanceof Blob && !outBlob) {
-    setOutBlob(result);
+  if (status === "done" && result?.blob && !outBlob) {
+    setOutBlob(result.blob);
+    setMeta(result.meta);
     setOutName(deriveOutputName(srcFile?.name || "document", "-compressed", ".pdf"));
   }
 
@@ -56,7 +64,8 @@ export default function CompressPage() {
 
       {srcFile && status === "working" && (
         <div className="mono" style={{ marginTop: 8 }}>
-          <progress max={100} value={progress} /> {progress}%
+          <progress max={100} value={progress} /> {progress}% {note && `(${note})`}
+          <button className="btn ghost" onClick={cancel} style={{ marginLeft: 8 }}>Cancel</button>
         </div>
       )}
       {error && <p className="mono" style={{ color: "salmon" }}>{error}</p>}
@@ -67,6 +76,7 @@ export default function CompressPage() {
           srcSize={srcFile.size}
           outName={outName}
           outBlob={outBlob}
+          meta={meta}
           onReset={reset}
         />
       )}

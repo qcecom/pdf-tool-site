@@ -9,6 +9,15 @@ Fast, private CV PDF tools — ATS-ready in minutes. No upload, no sign-up.
 - **OCR** – scan PDFs (free 1/day)
 - **JD Match** – compare CV text with a job description (free 1/day)
 
+### Compress presets
+
+| Preset | Pipeline | Notes |
+| --- | --- | --- |
+| Smart | Lossless for text-heavy; OCR for scans | Balanced quality |
+| ATS-safe | Keeps text/OCR for parsing | May be larger |
+| Email <2MB | Smart with target size ~2MB | |
+| Smallest | Rasterizes pages (lossy, not searchable) | Smallest size |
+
 ## Development
 
 ```bash
