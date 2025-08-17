@@ -1,0 +1,54 @@
+
+> pdf-tool-site@1.0.0 build
+> vite build --debug
+
+vite v5.4.19 building for production...
+transforming...
+✓ 434 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/assets/pdf.worker.min-Ck-4SQEE.js            0.07 kB
+dist/assets/pdf.worker.min-DmoYLGZA.js            0.07 kB
+dist/assets/ocrCv.worker-Jtj6B-rH.js              0.09 kB
+dist/assets/tesseract-Ck1p3XmN.js                 0.12 kB
+dist/index.html                                   0.69 kB │ gzip:   0.38 kB
+dist/assets/exportText.worker-D1pJcYrY.js         0.98 kB
+dist/assets/fontCheck.worker-6DB21TuB.js          1.57 kB
+dist/manifest.json                                6.89 kB │ gzip:   1.00 kB
+dist/assets/index-DgmrnWjT.js                    15.52 kB
+dist/assets/purify.es-BpVZ_uCt.js                21.79 kB
+dist/assets/index.es-gIRPtlQA.js                149.61 kB
+dist/assets/html2canvas.esm-BZxC391u.js         200.46 kB
+dist/assets/pdf-BSXOQhcf.js                     364.08 kB
+dist/assets/metadataScrub.worker-CGSOSTxl.js    428.63 kB
+dist/assets/mergeCv.worker-AgtYY3lF.js          428.66 kB
+dist/assets/smartCompress.worker-CWx9tYGc.js    787.86 kB
+dist/assets/pdf.worker.min-C6uPJa5v.js        1,325.09 kB
+dist/assets/pdf.worker.min-kK_DF-E3.js        1,364.68 kB
+dist/assets/index-rOB0yhsy.css                    1.71 kB │ gzip:   0.82 kB
+dist/assets/mini-D7DkKNqk.js                      0.34 kB │ gzip:   0.25 kB
+dist/assets/Contact-CHcQrWS3.js                   0.50 kB │ gzip:   0.32 kB
+dist/assets/Merge-B-1sWkz5.js                     0.53 kB │ gzip:   0.35 kB
+dist/assets/Privacy-T8ydcc16.js                   0.56 kB │ gzip:   0.34 kB
+dist/assets/Ocr-jVsSJP_3.js                       0.57 kB │ gzip:   0.38 kB
+dist/assets/Changelog-FfwaxXOK.js                 0.62 kB │ gzip:   0.40 kB
+dist/assets/Security-CLR1jpde.js                  0.75 kB │ gzip:   0.45 kB
+dist/assets/Toast-CPWYzq4u.js                     0.77 kB │ gzip:   0.48 kB
+dist/assets/WhyAts-Cm2oh43U.js                    0.96 kB │ gzip:   0.57 kB
+dist/assets/FontCheck-D4HxiG0k.js                 1.21 kB │ gzip:   0.71 kB
+dist/assets/Samples-Culq_pnr.js                   1.30 kB │ gzip:   0.73 kB
+dist/assets/MetadataScrub-Us5jRFgx.js             1.38 kB │ gzip:   0.81 kB
+dist/assets/JdMatch-DbMpgFLj.js                   1.49 kB │ gzip:   0.80 kB
+dist/assets/AtsExport-DOfwS83d.js                 1.69 kB │ gzip:   0.96 kB
+dist/assets/Home-Cw0DAq91.js                      1.72 kB │ gzip:   0.83 kB
+dist/assets/Compress-DYzszLJp.js                  1.77 kB │ gzip:   0.95 kB
+dist/assets/Faq-B2bJHXTV.js                       1.78 kB │ gzip:   0.82 kB
+dist/assets/useMeta-u6W4-McI.js                   1.91 kB │ gzip:   0.80 kB
+dist/assets/UpgradeModal--yzmBJc7.js              1.94 kB │ gzip:   1.01 kB
+dist/assets/ResultDownloadCard-C8ssdqkJ.js        1.95 kB │ gzip:   1.00 kB
+dist/assets/useWorker-wkLrF3oy.js                 2.08 kB │ gzip:   0.95 kB
+dist/assets/View-Dfr9M1Sc.js                      2.14 kB │ gzip:   1.16 kB
+dist/assets/View-B-Ilgtst.js                      2.21 kB │ gzip:   1.18 kB
+dist/assets/index-B5Wj_030.js                     3.24 kB │ gzip:   1.35 kB
+dist/assets/vendor-DAANvfs9.js                  868.23 kB │ gzip: 268.62 kB
+✓ built in 37.11s
