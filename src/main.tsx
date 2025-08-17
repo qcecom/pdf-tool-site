@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import AppErrorBoundary from "./AppErrorBoundary";
 import "./ui/theme.css";
 import "./ui/ui.css";
+import { isBrowser } from "@/utils/env";
 
 const routes: Record<string, () => Promise<{ default: React.ComponentType<any> }>> = {
   "/": () => import("@/app/routes/Home"),
@@ -22,17 +23,19 @@ const routes: Record<string, () => Promise<{ default: React.ComponentType<any> }
   "/contact": () => import("@/app/routes/Contact"),
 };
 
-const loadRoute = (routes[window.location.pathname] || routes["/"]) as () => Promise<{
-  default: React.ComponentType<any>;
-}>;
-const LazyComp = lazy(loadRoute);
+if (isBrowser) {
+  const loadRoute = (routes[window.location.pathname] || routes["/"]) as () => Promise<{
+    default: React.ComponentType<any>;
+  }>;
+  const LazyComp = lazy(loadRoute);
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <AppErrorBoundary>
-      <Suspense fallback={<div />}> 
-        <LazyComp />
-      </Suspense>
-    </AppErrorBoundary>
-  </React.StrictMode>
-);
+  ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <React.StrictMode>
+      <AppErrorBoundary>
+        <Suspense fallback={<div />}>
+          <LazyComp />
+        </Suspense>
+      </AppErrorBoundary>
+    </React.StrictMode>,
+  );
+}
