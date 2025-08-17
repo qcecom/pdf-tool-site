@@ -1,35 +1,55 @@
-/**
- * Create a canvas safely in both environments:
- * - In Web Workers: use OffscreenCanvas
- * - In Window (main thread): fallback to document.createElement('canvas')
- */
-export function createSafeCanvas(width: number, height: number) {
-  if (typeof OffscreenCanvas !== 'undefined') {
+import { isBrowser, isWorker } from "../../utils/env";
+
+export type Canvas2D = HTMLCanvasElement | OffscreenCanvas;
+
+export function createSafeCanvas(width = 1, height = 1): Canvas2D {
+  if (isWorker && typeof OffscreenCanvas !== "undefined") {
+    // @ts-ignore
     return new OffscreenCanvas(width, height);
   }
-
-  const doc = (globalThis as { document?: Document }).document;
-  if (!doc?.createElement) {
-    throw new Error('No canvas available: OffscreenCanvas & document are unavailable');
+  if (isBrowser && typeof document !== "undefined") {
+    const c = document.createElement("canvas");
+    c.width = width;
+    c.height = height;
+    return c;
   }
-
-  const canvas = doc.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  return canvas;
+  if (typeof OffscreenCanvas !== "undefined") {
+    // @ts-ignore
+    return new OffscreenCanvas(width, height);
+  }
+  throw new Error("No canvas API available in this environment");
 }
 
-/** Convert either kind of canvas to Blob (PNG by default) */
-export async function canvasToBlob(
-  canvas: OffscreenCanvas | HTMLCanvasElement,
-  type = 'image/png',
-  quality?: number
-): Promise<Blob> {
-  if ('convertToBlob' in canvas) {
-    return (canvas as OffscreenCanvas).convertToBlob({ type, quality });
-  }
+export function get2d(c: Canvas2D): CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D {
+  // @ts-ignore
+  const ctx = c.getContext("2d", { willReadFrequently: true });
+  if (!ctx) throw new Error("2D context unavailable");
+  return ctx as any;
+}
 
-  return new Promise<Blob>((resolve) =>
-    (canvas as HTMLCanvasElement).toBlob((b) => resolve(b as Blob), type, quality)
-  );
+export async function canvasToBlob(
+  c: Canvas2D,
+  type = "image/png",
+  quality?: number,
+): Promise<Blob> {
+  // @ts-ignore
+  if (typeof c.convertToBlob === "function") {
+    // @ts-ignore
+    return c.convertToBlob({ type, quality });
+  }
+  if ("toBlob" in (c as HTMLCanvasElement)) {
+    return new Promise<Blob>((res, rej) => {
+      (c as HTMLCanvasElement).toBlob(
+        (b) => (b ? res(b) : rej(new Error("toBlob failed"))),
+        type,
+        quality,
+      );
+    });
+  }
+  // @ts-ignore
+  const dataUrl = (c as HTMLCanvasElement).toDataURL(type, quality);
+  const bin = atob(dataUrl.split(",")[1]);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type });
 }

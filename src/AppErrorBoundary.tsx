@@ -1,4 +1,5 @@
 import React from "react";
+import { isBrowser } from "@/utils/env";
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ export default class AppErrorBoundary extends React.Component<Props, State> {
   }
 
   override componentDidCatch(error: unknown, errorInfo: unknown) {
-    if (import.meta.env.VITE_DEBUG)
+    if (import.meta.env.VITE_DEBUG && isBrowser)
       console.error("error", window.location.pathname, error, errorInfo);
   }
 

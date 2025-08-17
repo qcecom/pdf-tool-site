@@ -1,11 +1,28 @@
+import { isBrowser } from "@/utils/env";
+
 export const storage = {
   get(k: string) {
-    try { return window.localStorage.getItem(k); } catch { return null; }
+    if (!isBrowser) return null;
+    try {
+      return window.localStorage.getItem(k);
+    } catch {
+      return null;
+    }
   },
   set(k: string, v: string) {
-    try { window.localStorage.setItem(k, v); } catch { /* empty */ }
+    if (!isBrowser) return;
+    try {
+      window.localStorage.setItem(k, v);
+    } catch {
+      /* empty */
+    }
   },
   remove(k: string) {
-    try { window.localStorage.removeItem(k); } catch { /* empty */ }
-  }
+    if (!isBrowser) return;
+    try {
+      window.localStorage.removeItem(k);
+    } catch {
+      /* empty */
+    }
+  },
 };
