@@ -32,5 +32,8 @@ export default defineConfig({
       }
     }
   },
-  esbuild: { legalComments: 'none' }
+  esbuild: { legalComments: 'none' },
+  test: {
+    environment: 'node'
+  }
 });

@@ -46,3 +46,13 @@ Free tier allows one OCR and one JD match per day. Counts reset daily in `localS
 
 ## Offline
 The app works offline after the first load. PDFs are never cached.
+
+## Compression profiles
+
+The compressor offers three profiles:
+
+- **Lossless / Structure only** – re-saves the PDF and strips metadata while preserving all vector graphics and text.
+- **Image-aware (recommended)** – intended to recompress embedded images while keeping text and vector content. Defaults to 150 DPI images at JPEG quality 0.72 and converts photographic PNGs to JPEG. Metadata and thumbnails are stripped and fonts compacted.
+- **Smallest (image-only)** – rasterises every page to a JPEG image. Output is tiny but text becomes an image. **Not ATS-friendly.**
+
+The compressor will return the original file when optimisation gains are under ~2 % to avoid accidental size inflation. If the reduction is under 5 % the UI shows “Already optimised / No meaningful reduction”.
