@@ -48,7 +48,7 @@ export async function canvasToBlob(
   }
   // @ts-ignore
   const dataUrl = (c as HTMLCanvasElement).toDataURL(type, quality);
-  const bin = atob(dataUrl.split(",")[1]);
+  const bin = atob(dataUrl.split(",")[1] || "");
   const arr = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
   return new Blob([arr], { type });
