@@ -23,6 +23,10 @@ export async function rasterAll(data:ArrayBuffer, cfg:RasterCfg): Promise<Blob> 
   return out!.output('blob');
 }
 
-function blobToDataURL(b:Blob){
-  return new Promise<string>(res => { const r=new FileReader(); r.onload=()=>res(r.result as string); r.readAsDataURL(b); });
+async function blobToDataURL(b: Blob){
+  const buf = await b.arrayBuffer();
+  const base64 = typeof btoa === 'function'
+    ? btoa(String.fromCharCode(...new Uint8Array(buf)))
+    : Buffer.from(buf).toString('base64');
+  return `data:${b.type};base64,${base64}`;
 }
