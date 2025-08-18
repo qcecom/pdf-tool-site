@@ -1,6 +1,6 @@
 import { getPdfFromData } from "./safePdf";
 import { ensurePdfWorker } from "./ensurePdfWorker";
-import { createSafeCanvas, canvasToBlob, get2d } from "./safeCanvas";
+import { createCanvas, canvasToBlob } from "./safeCanvas";
 
 export type RenderOpts = {
   data: ArrayBuffer;
@@ -19,8 +19,7 @@ export async function renderPageBlob(
   const vp = page.getViewport({ scale: opts.dpi / 72 });
 
   // Safe canvas creation for both worker and main thread
-  const canvas = createSafeCanvas(vp.width, vp.height);
-  const ctx = get2d(canvas);
+  const { canvas, ctx } = createCanvas(vp.width, vp.height);
   await page.render({ canvasContext: ctx as any, viewport: vp }).promise;
 
   const type = opts.format === "webp" ? "image/webp" : "image/jpeg";

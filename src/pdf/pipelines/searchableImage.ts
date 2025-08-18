@@ -2,7 +2,7 @@ import { getPdfFromData } from "../utils/safePdf";
 import { jsPDF } from "jspdf";
 import { renderPageBlob } from "../utils/pdfCanvas";
 import { ensurePdfWorker } from "../utils/ensurePdfWorker";
-import { createSafeCanvas, get2d } from "../utils/safeCanvas";
+import { createCanvas } from "../utils/safeCanvas";
 
 type Cfg = {
   dpi: number;
@@ -69,10 +69,9 @@ export async function searchableImage(data: ArrayBuffer, cfg: Cfg): Promise<Blob
       // OCR fallback
       cfg.onProgress?.({ stage: "ocr", page: p, total: pdf.numPages });
       const worker = await getOcrWorker(cfg.lang || "eng");
-      const canvas = createSafeCanvas(vp.width, vp.height);
-      const ctx = get2d(canvas);
+      const { canvas, ctx } = createCanvas(vp.width, vp.height);
       await page.render({ canvasContext: ctx as any, viewport: vp }).promise;
-      const { data: ocr } = await worker.recognize(canvas);
+      const { data: ocr } = await worker.recognize(canvas as any);
       overlayOcr(doc, vp.height, ocr);
     } else {
       overlayPdfjsItems(doc, vp.height, items);
@@ -113,10 +112,10 @@ function overlayOcr(doc: jsPDF, pageHeight: number, ocr: any) {
   }
 }
 
-function blobToDataURL(b: Blob) {
-  return new Promise<string>((res) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result as string);
-    r.readAsDataURL(b);
-  });
+async function blobToDataURL(b: Blob) {
+  const buf = await b.arrayBuffer();
+  const base64 = typeof btoa === "function"
+    ? btoa(String.fromCharCode(...new Uint8Array(buf)))
+    : Buffer.from(buf).toString("base64");
+  return `data:${b.type};base64,${base64}`;
 }
