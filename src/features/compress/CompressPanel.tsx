@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PDFDocument } from 'pdf-lib';
 import { compressPdf, CompressProfile } from '@/compress';
 
 export default function CompressPanel() {
@@ -8,10 +9,14 @@ export default function CompressPanel() {
   const [pngToJpeg, setPngToJpeg] = useState(true);
   const [stripMetadata, setStripMetadata] = useState(true);
   const [result, setResult] = useState<any>(null);
+  const [pageCount, setPageCount] = useState<number | null>(null);
 
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
+    const ab = await f.arrayBuffer();
+    const pdf = await PDFDocument.load(ab);
+    setPageCount(pdf.getPageCount());
     const res = await compressPdf(f, { profile, dpi, quality, pngToJpeg, stripMetadata });
     setResult(res);
   };
@@ -53,6 +58,9 @@ export default function CompressPanel() {
       <div style={{marginTop:8}}>
         <input type="file" accept="application/pdf" onChange={onFile} />
       </div>
+      {pageCount && pageCount > 500 && (
+        <div style={{ color: 'orange' }}>Warning: File exceeds 500 pages, which may cause upload issues on some platforms. Consider splitting.</div>
+      )}
       {result && (
         <div style={{marginTop:8}}>
           <div>Before: {(result.beforeBytes/1024).toFixed(1)} kB After: {(result.afterBytes/1024).toFixed(1)} kB ({percent}% change)</div>
