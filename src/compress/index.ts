@@ -1,5 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
 import { bytesOf } from '@/utils/bytes';
+import { rasterAll } from '@/pdf/pipelines/rasterAll';
 
 export type CompressProfile = 'lossless' | 'image' | 'smallest';
 
@@ -39,39 +40,29 @@ async function lossless(data: ArrayBuffer, stripMeta: boolean): Promise<Uint8Arr
   return out;
 }
 
-async function smallestStub(): Promise<Uint8Array> {
-  const doc = await PDFDocument.create();
-  doc.addPage([300, 300]);
-  return doc.save();
-}
-
 export async function compressPdf(src: File | Blob | ArrayBuffer, opts: CompressOptions): Promise<CompressResult> {
   const options = { ...DEFAULTS, ...opts };
   const beforeBytes = bytesOf(src);
   const ab = src instanceof ArrayBuffer ? src : await (src as Blob).arrayBuffer();
   const t0 = Date.now();
-  let out: Uint8Array;
 
-  if (options.profile === 'lossless') {
-    out = await lossless(ab, options.stripMetadata);
-  } else if (options.profile === 'image') {
-    // Placeholder: re-save similar to lossless; real impl would recompress images
-    out = await lossless(ab, options.stripMetadata);
+  let outBlob: Blob;
+  if (options.profile === 'lossless' || options.profile === 'image') {
+    const u8 = await lossless(ab, options.stripMetadata);
+    outBlob = new Blob([u8.buffer as ArrayBuffer], { type: 'application/pdf' });
   } else {
-    out = await smallestStub();
+    outBlob = await rasterAll(ab, { dpi: options.dpi, quality: options.quality, format: 'jpeg' });
   }
 
   const durationMs = Date.now() - t0;
-  const afterBytes = out.byteLength;
+  const afterBytes = outBlob.size;
 
   let noGain = false;
-  if (options.profile !== 'smallest' && afterBytes >= beforeBytes * 0.98) {
+  if (afterBytes >= beforeBytes * 0.98) {
     noGain = true;
   }
 
-  const blob = noGain
-    ? new Blob([ab], { type: 'application/pdf' })
-    : new Blob([out.buffer as ArrayBuffer], { type: 'application/pdf' });
+  const blob = noGain ? new Blob([ab], { type: 'application/pdf' }) : outBlob;
   const finalBytes = noGain ? beforeBytes : afterBytes;
 
   return {
