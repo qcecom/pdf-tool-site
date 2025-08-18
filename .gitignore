@@ -6,3 +6,8 @@ dist/
 *.gif
 *.mp4
 *.png
+e2e/fixtures/out/
+e2e/.artifacts/
+e2e/.reports/
+.env.e2e.local
+e2e/.preview.pid

@@ -1,0 +1,32 @@
+name: e2e
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npm run gen:fixtures
+      - run: npm run qa:local
+      - name: Run prod suite
+        if: env.E2E_PROD_BASE
+        env:
+          E2E_BASE: ${{ env.E2E_PROD_BASE }}
+          E2E_REPORT_DIR: e2e/.reports/prod
+        run: npm run e2e
+      - uses: actions/upload-artifact@v3
+        with:
+          name: e2e-artifacts
+          path: |
+            TOOL_STATUS.md
+            e2e/.reports
+            e2e/.artifacts
+

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --strictPort --port 4173",
     "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "ascii:fix": "node scripts/ascii-fix.mjs",
@@ -15,7 +15,14 @@
     "test:smoke:full": "playwright test",
     "postinstall": "playwright install --with-deps || true",
     "size": "node scripts/size-guard.mjs",
-    "audit": "node scripts/audit.mjs"
+    "audit": "node scripts/audit.mjs",
+    "gen:fixtures": "tsx e2e/fixtures/generate-fixtures.ts",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "preview:start": "tsx e2e/scripts/preview-start.ts",
+    "preview:stop": "tsx e2e/scripts/preview-stop.ts",
+    "tool:status": "tsx e2e/scripts/tool-status.ts",
+    "qa:local": "run-s gen:fixtures build preview:start e2e tool:status preview:stop"
   },
   "dependencies": {
     "jspdf": "^2.5.1",
@@ -28,6 +35,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.41.2",
+    "playwright": "^1.41.2",
     "@types/jspdf": "^2.0.0",
     "@types/node": "^20.8.4",
     "@types/react": "^18.2.37",
@@ -42,7 +50,11 @@
     "typescript": "^5.2.2",
     "vitest": "^1.2.0",
     "vite": "^5.0.0",
-    "vite-tsconfig-paths": "^4.0.5"
+    "vite-tsconfig-paths": "^4.0.5",
+    "tsx": "^4.7.0",
+    "jimp": "^0.22.10",
+    "zod": "^3.22.4",
+    "npm-run-all": "^4.1.5"
   },
   "engines": {
     "node": ">=18.18"

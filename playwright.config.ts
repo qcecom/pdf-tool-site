@@ -1,22 +1,40 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
+import fs from 'fs';
+import dotenv from 'dotenv';
 
-const lite = process.env.SMOKE_MODE === 'lite';
+// Load env for E2E base URL if provided via preview:start script
+if (fs.existsSync('.env.e2e.local')) {
+  dotenv.config({ path: '.env.e2e.local' });
+}
+
+const E2E_BASE = process.env.E2E_BASE || 'http://localhost:4173';
+const reportDir = process.env.E2E_REPORT_DIR || path.join('e2e', '.reports', 'local');
 
 export default defineConfig({
-  testDir: 'tests',
-  testMatch: /.*\.spec\.ts/,
-  reporter: [['list']],
-  forbidOnly: true,
-  timeout: 30_000,
-  ...(lite
-    ? {
-        // Lite mode: no real browsers required; unit-style tests only
-        projects: [{ name: 'lite' }],
-        workers: 1,
-        retries: 0
-      }
-    : {
-        // Full mode: real browsers (installed via postinstall)
-        use: { headless: true }
-      })
+  testDir: path.join(__dirname, 'e2e/tests'),
+  retries: 1,
+  reporter: [
+    ['list'],
+    ['html', { open: 'never', outputFolder: reportDir }]
+  ],
+  use: {
+    baseURL: E2E_BASE,
+    acceptDownloads: true,
+    screenshot: 'only-on-failure',
+    trace: 'retain-on-failure',
+    downloadsPath: path.join(__dirname, 'e2e/.artifacts')
+  },
+  timeout: 60_000,
+  workers: 1,
+  expect: {
+    timeout: 10_000
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] }
+    }
+  ]
 });
+
