@@ -1,5 +1,4 @@
 import { jsPDF } from "jspdf";
-import React from "react";
 import { isBrowser } from "@/utils/env";
 
 export default function Samples() {
@@ -9,7 +8,7 @@ export default function Samples() {
     for (let p = 0; p < 3; p++) {
       if (p) doc.addPage();
       for (let i = 0; i < 40; i++)
-        doc.text(`Line ${i + 1} — Lorem ipsum dolor sit amet.`, 20, 20 + i * 12);
+        doc.text(`Line ${i + 1} - Lorem ipsum dolor sit amet.`, 20, 20 + i * 12);
     }
     return new Blob([doc.output("arraybuffer")], { type: "application/pdf" });
   }

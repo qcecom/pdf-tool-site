@@ -1,39 +1,21 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import { visualizer } from './scripts/rollup-plugin-visualizer.js';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tsconfigPaths(),
-    visualizer({
-      filename: 'dist/stats.html',
-      title: 'Bundle Stats',
-      gzipSize: true,
-      brotliSize: true
-    })
-  ],
-  worker: { format: 'es' },
-  resolve: { dedupe: ['react', 'react-dom'] },
-  build: {
-    manifest: 'manifest.json',
-    chunkSizeWarningLimit: 500,
-    rollupOptions: {
-      external: ['tesseract.js'],
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('tesseract.js') || id.includes('pdfjs-dist')) return 'pdf-ocr-vendor';
-            if (id.includes('@dnd-kit')) return 'dnd-vendor';
-            return 'vendor';
-          }
-        }
-      }
-    }
+  plugins: [react()],
+  optimizeDeps: {
+    include: ["react", "react-dom"],
   },
-  esbuild: { legalComments: 'none' },
-  test: {
-    environment: 'node'
-  }
+  resolve: {
+    alias: { "@": "/src" },
+    dedupe: ["react", "react-dom"],
+  },
+  worker: {
+    format: "es",
+    rollupOptions: {
+      output: {
+        format: "es",
+      },
+    },
+  },
 });

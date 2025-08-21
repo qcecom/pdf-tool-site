@@ -1,11 +1,11 @@
-import React, { Suspense, lazy } from "react";
+import { StrictMode, Suspense, lazy, type ComponentType } from "react";
 import ReactDOM from "react-dom/client";
 import AppErrorBoundary from "./AppErrorBoundary";
 import "./ui/theme.css";
 import "./ui/ui.css";
 import { isBrowser } from "@/utils/env";
 
-const routes: Record<string, () => Promise<{ default: React.ComponentType<any> }>> = {
+const routes: Record<string, () => Promise<{ default: ComponentType<any> }>> = {
   "/": () => import("@/app/routes/Home"),
   "/cv/compress": () => import("@/app/routes/cv/Compress"),
   "/cv/merge": () => import("@/app/routes/cv/Merge"),
@@ -25,17 +25,17 @@ const routes: Record<string, () => Promise<{ default: React.ComponentType<any> }
 
 if (isBrowser) {
   const loadRoute = (routes[window.location.pathname] || routes["/"]) as () => Promise<{
-    default: React.ComponentType<any>;
+    default: ComponentType<any>;
   }>;
   const LazyComp = lazy(loadRoute);
 
   ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <React.StrictMode>
+    <StrictMode>
       <AppErrorBoundary>
         <Suspense fallback={<div />}>
           <LazyComp />
         </Suspense>
       </AppErrorBoundary>
-    </React.StrictMode>,
+    </StrictMode>,
   );
 }
