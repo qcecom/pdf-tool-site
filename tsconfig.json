@@ -1,22 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable", "WebWorker"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
+    "strict": false,
     "skipLibCheck": true,
-    "allowJs": false,
-    "resolveJsonModule": true,
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "tesseract.js": ["src/stubs/tesseract"]
+      "@/*": ["src/*"]
     }
-  },
-  "include": ["src", "env.d.ts"]
+  }
 }

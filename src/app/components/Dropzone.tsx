@@ -1,8 +1,10 @@
 import { useRef } from "react";
 
 export default function Dropzone({
-  onFile, maxMB = 100
-}: { onFile: (file: File) => void; maxMB?: number }) {
+  onFile,
+  maxMB = 100,
+  multiple = false,
+}: { onFile: (file: File) => void; maxMB?: number; multiple?: boolean }) {
   const ref = useRef<HTMLInputElement | null>(null);
 
   const handle = (file: File) => {
@@ -25,10 +27,11 @@ export default function Dropzone({
         ref={ref}
         type="file"
         accept="application/pdf,.pdf"
+        multiple={multiple}
         style={{ display: "none" }}
         onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) handle(f);
+          const files = e.target.files;
+          if (files) Array.from(files).forEach(handle);
         }}
       />
       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
@@ -41,8 +44,8 @@ export default function Dropzone({
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
-          const f = e.dataTransfer.files?.[0];
-          if (f) handle(f);
+          const files = e.dataTransfer.files;
+          if (files) Array.from(files).forEach(handle);
         }}
       >
         <div style={{ padding: 20, textAlign: "center", color: "var(--muted)" }}>

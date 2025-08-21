@@ -18,8 +18,9 @@ export default function ResultDownloadCard({
   meta,
   onReset,
 }: Props) {
+  const srcBytes = typeof srcSize === "number" ? srcSize : (srcSize?.size ?? 0);
   const outSize = outBlob.size;
-  const deltaPct = srcSize != null ? ((outSize - srcSize) / srcSize) * 100 : null;
+  const deltaPct = srcSize != null ? ((outSize - srcBytes) / srcBytes) * 100 : null;
   const badges: string[] = [];
   if (meta?.pipeline !== "rasterAll") {
     badges.push("ATS-safe", "Searchable");
@@ -50,7 +51,7 @@ export default function ResultDownloadCard({
       <div className="mono" style={{ display: "grid", gap: 4 }}>
         <div>
           Source file: <strong>{srcName}</strong>
-          {srcSize != null ? ` - ${formatBytes(srcSize)}` : ""}
+          {srcSize != null ? ` - ${formatBytes(srcBytes)}` : ""}
         </div>
         <div>
           Output file: <strong>{outName}</strong> - {formatBytes(outSize)}

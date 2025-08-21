@@ -66,7 +66,7 @@ export default function MergeView() {
       <Header />
       <main className="container">
         <Row className="mb-3"><h2>{COPY.mergeTitle}</h2></Row>
-        {!outBlob && <Dropzone onFile={handleFile} />}
+        {!outBlob && <Dropzone onFile={handleFile} multiple />}
         {!outBlob && files.length > 0 && <FileList files={files} onReorder={setFiles} />}
         {!outBlob && files.length > 1 && (
           <Row><Btn onClick={startMerge}>{COPY.run}</Btn></Row>

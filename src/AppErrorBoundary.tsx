@@ -1,8 +1,8 @@
-import React from "react";
+import { Component, type ReactNode } from "react";
 import { isBrowser } from "@/utils/env";
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface State {
@@ -10,7 +10,7 @@ interface State {
   error: unknown;
 }
 
-export default class AppErrorBoundary extends React.Component<Props, State> {
+export default class AppErrorBoundary extends Component<Props, State> {
   override state: State = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: unknown): State {

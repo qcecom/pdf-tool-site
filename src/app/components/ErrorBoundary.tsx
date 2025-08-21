@@ -1,14 +1,14 @@
-import React from "react";
+import { Component, type ReactNode } from "react";
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 interface State {
   hasError: boolean;
   error: unknown;
 }
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+export default class ErrorBoundary extends Component<Props, State> {
   override state: State = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: unknown): State {
