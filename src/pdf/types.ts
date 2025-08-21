@@ -10,6 +10,26 @@ export interface MergeCvPayload {
 
 export interface ExportTextPayload {
   file: ArrayBuffer;
+  jobDescription?: string;
+}
+
+export interface ATSNormalizationReport {
+  originalLength: number;
+  normalizedLength: number;
+  removedElements: string[];
+  warnings: string[];
+}
+
+export interface ATSKeywordAnalysis {
+  score: number;
+  commonKeywords: string[];
+  missingKeywords: string[];
+}
+
+export interface ExportTextResult {
+  text: string;
+  report: ATSNormalizationReport;
+  keywordAnalysis: ATSKeywordAnalysis | null;
 }
 
 export interface OcrPayload {

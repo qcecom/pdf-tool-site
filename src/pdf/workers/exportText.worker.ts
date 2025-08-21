@@ -1,5 +1,6 @@
 import { getPdfFromData } from "../utils/safePdf";
-import type { ExportTextPayload } from "@/pdf/types";
+import type { ExportTextPayload, ExportTextResult } from "@/pdf/types";
+import { normalizeTextForATS, analyzeATSKeywords } from "@/utils/ats/normalize";
 
 self.onmessage = async (e: MessageEvent<ExportTextPayload>) => {
   try {
@@ -17,7 +18,17 @@ self.onmessage = async (e: MessageEvent<ExportTextPayload>) => {
         value: Math.round((i / pdf.numPages) * 100),
       });
     }
-    (self as any).postMessage({ type: "result", data: text });
+    const { text: normalizedText, report } = normalizeTextForATS(text);
+    let keywordAnalysis = null;
+    if (e.data.jobDescription) {
+      keywordAnalysis = analyzeATSKeywords(normalizedText, e.data.jobDescription);
+    }
+    const result: ExportTextResult = {
+      text: normalizedText,
+      report,
+      keywordAnalysis,
+    };
+    (self as any).postMessage({ type: "result", data: result });
   } catch (err: any) {
     (self as any).postMessage({
       type: "error",

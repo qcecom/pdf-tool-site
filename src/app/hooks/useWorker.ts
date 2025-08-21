@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 type WorkerEvent =
-  | { type: "progress"; page: number; total: number; stage?: string }
+  | { type: "progress"; value: number; stage?: string }
+  | { type: "result"; data: any }
   | { type: "ok"; blob: any; meta?: any }
   | { type: "error"; message: string };
 
@@ -22,10 +23,14 @@ export function useWorker(WorkerCtor: new () => Worker, label = "worker") {
       w.onmessage = (e: MessageEvent<WorkerEvent>) => {
         const m = e.data;
         if (m.type === 'progress') {
-          const val = Math.round((m.page / m.total) * 100);
-          DBG && console.log(`[${label}] progress`, val);
-          setProgress(val);
+          DBG && console.log(`[${label}] progress`, m.value);
+          setProgress(m.value);
           setNote(m.stage);
+        }
+        if (m.type === 'result') {
+          DBG && console.log(`[${label}] done`);
+          setResult(m.data);
+          setStatus('done');
         }
         if (m.type === 'ok') {
           DBG && console.log(`[${label}] done`);
@@ -60,9 +65,12 @@ export function useWorker(WorkerCtor: new () => Worker, label = "worker") {
     w.onmessage = (e: MessageEvent<WorkerEvent>) => {
       const m = e.data as any;
       if (m.type === 'progress') {
-        const val = Math.round((m.page / m.total) * 100);
-        setProgress(val);
+        setProgress(m.value);
         setNote(m.stage);
+      }
+      if (m.type === 'result') {
+        setResult(m.data);
+        setStatus('done');
       }
       if (m.type === 'ok') {
         setResult({ blob: m.blob, meta: m.meta });
