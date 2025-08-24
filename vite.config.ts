@@ -13,9 +13,13 @@ export default defineConfig({
   worker: {
     format: "es",
     rollupOptions: {
-      output: {
-        format: "es",
-      },
+      output: { format: "es" },
     },
+  },
+  build: {
+    rollupOptions: {
+      output: { format: "es" },
+    },
+    target: "es2020",
   },
 });
