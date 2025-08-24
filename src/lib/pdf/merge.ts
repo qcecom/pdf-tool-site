@@ -1,13 +1,12 @@
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument } from 'pdf-lib';
 
-export async function mergePdfs(files: File[]): Promise<Blob> {
+export async function mergeFiles(files: File[]): Promise<Uint8Array> {
   const out = await PDFDocument.create();
   for (const f of files) {
-    const bytes = await f.arrayBuffer();
-    const src = await PDFDocument.load(bytes);
-    const pages = await out.copyPages(src, src.getPageIndices());
-    for (const p of pages) out.addPage(p);
+    const bytes = new Uint8Array(await f.arrayBuffer());
+    const pdf = await PDFDocument.load(bytes);
+    const pages = await out.copyPages(pdf, pdf.getPageIndices());
+    pages.forEach((p) => out.addPage(p));
   }
-  const buf = await out.save();
-  return new Blob([buf], { type: "application/pdf" });
+  return await out.save({ useObjectStreams: true });
 }
