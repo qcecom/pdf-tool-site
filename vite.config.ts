@@ -11,10 +11,11 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
   },
   worker: {
-    format: "es",
+    // Workers must use an ESM format to allow code-splitting
+    format: "esm",
     rollupOptions: {
       output: {
-        format: "es",
+        format: "esm",
       },
     },
   },
