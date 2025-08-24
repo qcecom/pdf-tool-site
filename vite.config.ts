@@ -10,6 +10,12 @@ export default defineConfig({
     alias: { "@": "/src" },
     dedupe: ["react", "react-dom"],
   },
+  worker: {
+    format: "es",
+    rollupOptions: {
+      output: { format: "es" },
+    },
+  },
   build: {
     rollupOptions: {
       output: { format: "es" },
